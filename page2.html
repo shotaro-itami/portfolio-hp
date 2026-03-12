@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>人物紹介 | 2枚目ページ</title>
+  <style>
+    :root {
+      --bg-1: #f3f0e8;
+      --bg-2: #dbe6dc;
+      --ink: #1c2a21;
+      --accent: #a33e2f;
+      --line: #355a45;
+      --paper: #fffdf8;
+      --paper-2: #f7f5ef;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.8;
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", "BIZ UDPMincho", serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(163,62,47,.14), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(53,90,69,.15), transparent 45%),
+        linear-gradient(120deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+      position: relative;
+    }
+    .sticker {
+      position: absolute;
+      padding: 6px 10px;
+      border: 1px dashed var(--line);
+      background: #fffaf2;
+      border-radius: 10px;
+      font-size: .85rem;
+      transform: rotate(-6deg);
+      top: 4px;
+      right: 22px;
+    }
+    h1, h2, h3 {
+      line-height: 1.35;
+      margin: 0 0 8px;
+    }
+    h1 { font-size: clamp(1.4rem, 2.8vw, 2rem); }
+    h2 { font-size: clamp(1.05rem, 2.4vw, 1.35rem); }
+    .lead {
+      margin: 14px 0 20px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 253, 248, .75);
+      backdrop-filter: blur(1px);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 4px 4px 0 rgba(28,42,33,.12);
+    }
+    .card:nth-child(2n) {
+      background: var(--paper-2);
+      transform: rotate(-.4deg);
+    }
+    .card:nth-child(3n) {
+      transform: rotate(.5deg);
+    }
+    .kv {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .kv span {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: .92rem;
+      background: #fff;
+    }
+    .quote {
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+      margin: 10px 0 0;
+      font-weight: 600;
+    }
+    .quirk {
+      display: inline-block;
+      transform-origin: 50% 100%;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .hobby-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .hobby {
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .hobby::after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      right: -8px;
+      bottom: -8px;
+      background: rgba(163,62,47,.18);
+    }
+    a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+    }
+    a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .small { font-size: .92rem; opacity: .88; }
+    @keyframes tremble {
+      0%, 100% { transform: translateX(0) rotate(0); }
+      25% { transform: translateX(.7px) rotate(.4deg); }
+      50% { transform: translateX(-.8px) rotate(-.35deg); }
+      75% { transform: translateX(.4px) rotate(.2deg); }
+    }
+    @media (min-width: 860px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .lead { padding: 20px; }
+    }
+    @media (max-width: 560px) {
+      .hobby-grid { grid-template-columns: 1fr; }
+      .sticker { position: static; display: inline-block; margin-bottom: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="sticker">補足情報</div>
+
+    <h1>人物紹介（2枚目）</h1>
+    <div class="lead">
+      本ページは、人物像を簡潔に示すための補足情報です。文面は実務的に整理して掲載しています。
+      <span class="quirk">※補足情報としてご覧ください</span>
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <h2>基本情報</h2>
+        <div class="kv">
+          <span>性別：男</span>
+          <span>年齢：35</span>
+          <span>性格：話好き / 基本穏やか / 頑固</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>価値観</h2>
+        <p>
+          日々の判断で重視しているのは、
+          「人生を楽しく、笑顔で生きること」です。
+        </p>
+        <p class="quote">長く続く努力ほど、明るさを失わない姿勢が重要と考えています。</p>
+      </article>
+
+      <article class="card">
+        <h2>趣味・特技</h2>
+        <div class="hobby-grid">
+          <div class="hobby">写真</div>
+          <div class="hobby">柔道</div>
+          <div class="hobby">漫画</div>
+          <div class="hobby">珈琲（豆から挽いて抽出）</div>
+          <div class="hobby">レアチーズケーキ作り</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>柔道について</h2>
+        <p>
+          大学時代には、個人・団体の双方で全国16位の実績があります。
+          現在は、小学生・中学生の頃にお世話になった柔道場にて、
+          中学生への指導を月に数回継続しています。
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>日常のこだわり</h2>
+        <p>
+          珈琲は豆を挽くところから行い、その日の気分に合わせて抽出を調整します。
+          レアチーズケーキは「自分の好きな味で食べたい」という理由で、配合を調整して手作りしています。
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>遷移</h2>
+        <p class="small">1枚目に戻る場合は以下から移動してください。</p>
+        <p><a href="index.html">index.html に戻る</a></p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
