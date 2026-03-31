@@ -30,3 +30,28 @@
 
 - 守秘情報や実データは掲載していません。
 - 構成はシンプルな静的 HTML のため、そのまま Web サーバへ配置できます。
+
+## 本番公開
+
+現在の本番は GCE VM 上で次の構成です。
+
+- Git 管理ディレクトリ: `/home/itamishotaro/portfolio-hp`
+- 公開先: `/var/www/html`
+- ドメイン: `itamishotaro.com`
+- 補助ドメイン: `www.itamishotaro.com`
+- TLS: Cloudflare Origin Certificate
+
+公開時は Git 管理ディレクトリから `/var/www/html` に必要ファイルだけ反映します。
+
+```bash
+cd /home/itamishotaro/portfolio-hp
+git pull
+sudo cp index.html /var/www/html/index.html
+sudo cp page2.html /var/www/html/page2.html
+sudo chown root:root /var/www/html/index.html /var/www/html/page2.html
+sudo chmod 644 /var/www/html/index.html /var/www/html/page2.html
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Nginx の実ファイルは `deploy/nginx/itamishotaro.com.conf` に置いて管理します。
