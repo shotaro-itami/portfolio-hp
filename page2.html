@@ -133,6 +133,17 @@
     }
     a:hover { color: var(--accent); border-bottom-color: var(--accent); }
     .small { font-size: .92rem; opacity: .88; }
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(163,62,47,.14), rgba(255,250,242,.95));
+      font-weight: 700;
+    }
     @keyframes tremble {
       0%, 100% { transform: translateX(0) rotate(0); }
       25% { transform: translateX(.7px) rotate(.4deg); }
@@ -208,7 +219,8 @@
 
       <article class="card">
         <h2>遷移</h2>
-        <p class="small">1枚目に戻る場合は以下から移動してください。</p>
+        <p class="small">制作実績と 1 枚目への導線を以下にまとめています。</p>
+        <p><a class="project-link" href="/books/">制作実績: 読書時間管理ツールを見る</a></p>
         <p><a href="index.html">index.html に戻る</a></p>
       </article>
     </section>
