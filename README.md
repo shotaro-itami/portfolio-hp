@@ -36,22 +36,20 @@
 現在の本番は GCE VM 上で次の構成です。
 
 - Git 管理ディレクトリ: `/home/itamishotaro/portfolio-hp`
-- 公開先: `/var/www/html`
+- release 格納: `/var/www/releases/portfolio-hp/<timestamp>`
+- 公開 symlink:
+  - `/var/www/html/index.html`
+  - `/var/www/html/page2.html`
 - ドメイン: `itamishotaro.com`
 - 補助ドメイン: `www.itamishotaro.com`
 - TLS: Cloudflare Origin Certificate
 
-公開時は Git 管理ディレクトリから `/var/www/html` に必要ファイルだけ反映します。
+公開時は Git 管理ディレクトリから release を作り、公開 symlink だけ切り替えます。
 
 ```bash
 cd /home/itamishotaro/portfolio-hp
-git pull
-sudo cp index.html /var/www/html/index.html
-sudo cp page2.html /var/www/html/page2.html
-sudo chown root:root /var/www/html/index.html /var/www/html/page2.html
-sudo chmod 644 /var/www/html/index.html /var/www/html/page2.html
-sudo nginx -t
-sudo systemctl reload nginx
+git pull origin main
+./deploy/release.sh
 ```
 
-Nginx の実ファイルは `deploy/nginx/itamishotaro.com.conf` に置いて管理します。
+詳細な手順、rollback、Nginx 管理は `deploy/README.md` を正本にします。

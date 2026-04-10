@@ -1,33 +1,50 @@
-# Deploy Files
+# Deploy Runbook
 
-静的サイト `portfolio-hp` の本番公開用メモです。
+`portfolio-hp` の本番運用正本です。Git 作業コピーと公開中ファイルを分離し、release ディレクトリから symlink で配信します。
 
-## Files
+## 本番ディレクトリ責務
 
-- `nginx/itamishotaro.com.conf`
+- Git checkout: `/home/itamishotaro/portfolio-hp`
+- release 格納: `/var/www/releases/portfolio-hp/<timestamp>`
+- 公開 symlink:
+  - `/var/www/html/index.html`
+  - `/var/www/html/page2.html`
 
-## Publish Flow
-
-作業元:
-
-- Git 管理ディレクトリ: `/home/itamishotaro/portfolio-hp`
-- 公開先: `/var/www/html`
-
-反映例:
+## デプロイ
 
 ```bash
 cd /home/itamishotaro/portfolio-hp
-git pull
-sudo cp index.html /var/www/html/index.html
-sudo cp page2.html /var/www/html/page2.html
-sudo chown root:root /var/www/html/index.html /var/www/html/page2.html
-sudo chmod 644 /var/www/html/index.html /var/www/html/page2.html
+git pull origin main
+./deploy/release.sh
+```
+
+`deploy/release.sh` は以下だけを行います。
+
+1. release ディレクトリ作成
+2. `index.html` / `page2.html` 配置
+3. symlink 切替
+4. `nginx -t`
+5. `systemctl reload nginx`
+
+更新途中に失敗しても既存の `/` と `/page2.html` を残します。
+
+## Rollback
+
+```bash
+sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/index.html /var/www/html/index.html
+sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/page2.html /var/www/html/page2.html
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+## Files
+
+- `release.sh`
+- `nginx/itamishotaro.com.conf`
+- `nginx/reading-time-tracker-rate-limit.conf`
+
 ## Notes
 
 - `まとめてく.txt` は公開先へ置かない
-- `index.html.bak` や `index.nginx-debian.html` は整理候補
+- `/var/www/html` 配下は symlink だけを更新する
 - 証明書ファイル `/etc/ssl/cloudflare/*` は Git 管理しない
