@@ -9,6 +9,7 @@
 - 公開 symlink:
   - `/var/www/html/index.html`
   - `/var/www/html/page2.html`
+  - `/var/www/html/architecture-diagram.html`
 
 ## デプロイ
 
@@ -21,7 +22,7 @@ git pull origin main
 `deploy/release.sh` は以下だけを行います。
 
 1. release ディレクトリ作成
-2. `index.html` / `page2.html` 配置
+2. `index.html` / `page2.html` / `architecture-diagram.html` 配置
 3. symlink 切替
 4. `nginx -t`
 5. `systemctl reload nginx`
@@ -33,6 +34,7 @@ git pull origin main
 ```bash
 sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/index.html /var/www/html/index.html
 sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/page2.html /var/www/html/page2.html
+sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/architecture-diagram.html /var/www/html/architecture-diagram.html
 sudo nginx -t
 sudo systemctl reload nginx
 ```

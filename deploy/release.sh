@@ -11,9 +11,11 @@ WORK_DIR="$(mktemp -d)"
 
 INDEX_LINK="${INDEX_LINK:-$TARGET_ROOT/index.html}"
 PAGE2_LINK="${PAGE2_LINK:-$TARGET_ROOT/page2.html}"
+ARCHITECTURE_LINK="${ARCHITECTURE_LINK:-$TARGET_ROOT/architecture-diagram.html}"
 
 PREVIOUS_INDEX=""
 PREVIOUS_PAGE2=""
+PREVIOUS_ARCHITECTURE=""
 
 rollback() {
   local exit_code=$?
@@ -29,6 +31,9 @@ rollback() {
   if [[ -n "$PREVIOUS_PAGE2" ]]; then
     sudo ln -sfn "$PREVIOUS_PAGE2" "$PAGE2_LINK"
   fi
+  if [[ -n "$PREVIOUS_ARCHITECTURE" ]]; then
+    sudo ln -sfn "$PREVIOUS_ARCHITECTURE" "$ARCHITECTURE_LINK"
+  fi
 
   sudo nginx -t || true
   sudo systemctl reload nginx || true
@@ -40,17 +45,21 @@ trap rollback EXIT
 mkdir -p "$WORK_DIR/$TIMESTAMP"
 install -m 644 "$ROOT_DIR/index.html" "$WORK_DIR/$TIMESTAMP/index.html"
 install -m 644 "$ROOT_DIR/page2.html" "$WORK_DIR/$TIMESTAMP/page2.html"
+install -m 644 "$ROOT_DIR/architecture-diagram.html" "$WORK_DIR/$TIMESTAMP/architecture-diagram.html"
 
 [[ -f "$WORK_DIR/$TIMESTAMP/index.html" ]]
 [[ -f "$WORK_DIR/$TIMESTAMP/page2.html" ]]
+[[ -f "$WORK_DIR/$TIMESTAMP/architecture-diagram.html" ]]
 
 PREVIOUS_INDEX="$(readlink -f "$INDEX_LINK" 2>/dev/null || true)"
 PREVIOUS_PAGE2="$(readlink -f "$PAGE2_LINK" 2>/dev/null || true)"
+PREVIOUS_ARCHITECTURE="$(readlink -f "$ARCHITECTURE_LINK" 2>/dev/null || true)"
 
 sudo mkdir -p "$RELEASES_DIR"
 sudo mv "$WORK_DIR/$TIMESTAMP" "$RELEASE_DIR"
 sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/index.html" "$INDEX_LINK"
 sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/page2.html" "$PAGE2_LINK"
+sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/architecture-diagram.html" "$ARCHITECTURE_LINK"
 sudo nginx -t
 sudo systemctl reload nginx
 

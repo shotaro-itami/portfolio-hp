@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCE 単一 VM 本番構成図と運用資料</title>
+  <style>
+    :root {
+      --bg: #08121d;
+      --panel: rgba(9, 24, 40, 0.9);
+      --line: #7ddcff;
+      --text: #f3fbff;
+      --muted: #a8c8d8;
+      --blue: rgba(91, 140, 255, 0.14);
+      --mint: rgba(48, 221, 185, 0.14);
+      --gold: rgba(255, 188, 83, 0.14);
+      --pink: rgba(255, 102, 158, 0.14);
+      --red: rgba(255, 104, 104, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Trebuchet MS", "Yu Gothic UI", sans-serif;
+      background:
+        linear-gradient(rgba(125, 220, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 220, 255, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 15% 15%, rgba(48, 221, 185, 0.13), transparent 22%),
+        radial-gradient(circle at 85% 20%, rgba(255, 102, 158, 0.10), transparent 18%),
+        linear-gradient(180deg, #08121d 0%, #102235 100%);
+      background-size: 40px 40px, 40px 40px, auto, auto, auto;
+    }
+
+    .slide {
+      width: 1360px;
+      min-height: 760px;
+      margin: 0 auto;
+      padding: 34px 42px 30px;
+      position: relative;
+      page-break-after: always;
+    }
+
+    .slide:last-child { page-break-after: auto; }
+
+    .badge, .label {
+      display: inline-block;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      background: rgba(4, 12, 20, 0.95);
+      font-weight: 800;
+    }
+
+    .badge {
+      padding: 7px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .label {
+      padding: 4px 10px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    h1 { margin: 14px 0 8px; font-size: 42px; line-height: 1.08; }
+    h2 { margin: 0 0 10px; font-size: 28px; line-height: 1.12; }
+    h3 { margin: 0 0 10px; font-size: 21px; }
+
+    .lead, .small, .note {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .lead {
+      margin: 0 0 24px;
+      max-width: 1220px;
+      font-size: 18px;
+    }
+
+    .small, .note { font-size: 14px; }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      padding: 20px 22px;
+      border: 4px solid var(--line);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: inset 0 0 0 1px rgba(125, 220, 255, 0.10);
+    }
+
+    .panel-blue { background: linear-gradient(180deg, var(--blue), var(--panel)); }
+    .panel-mint { background: linear-gradient(180deg, var(--mint), var(--panel)); }
+    .panel-gold { background: linear-gradient(180deg, var(--gold), var(--panel)); }
+    .panel-pink { background: linear-gradient(180deg, var(--pink), var(--panel)); }
+    .panel-red { background: linear-gradient(180deg, var(--red), var(--panel)); }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 0 24px;
+    }
+
+    .bubble {
+      padding: 11px 18px;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      background: rgba(6, 17, 30, 0.95);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .arrow {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--line);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    li + li { margin-top: 5px; }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 15px 17px;
+      border: 3px solid var(--line);
+      border-radius: 20px;
+      background: rgba(4, 12, 22, 0.98);
+      color: var(--text);
+      white-space: pre-wrap;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.48;
+    }
+
+    .mono {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+    }
+
+    .footer {
+      position: absolute;
+      right: 42px;
+      bottom: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="badge">SLIDE 1</div>
+    <h1>GCE 単一 VM の現行本番構成</h1>
+    <p class="lead">GCE VM は 1 台のまま維持しつつ、`portfolio-hp` と `reading-time-tracker` の公開中コード、Git 作業コピー、DB、env、backup を分離した。単一 VM 構成のままでも、更新失敗、権限事故、DB 巻き込みを避けるための最小限の運用境界を作っている。</p>
+    <div class="flow">
+      <div class="bubble">User</div><div class="arrow">→</div>
+      <div class="bubble">Cloudflare</div><div class="arrow">→</div>
+      <div class="bubble">GCE Ubuntu VM</div><div class="arrow">→</div>
+      <div class="bubble">Nginx</div><div class="arrow">→</div>
+      <div class="bubble">Static / Flask + SPA</div>
+    </div>
+    <div class="grid-2">
+      <div class="card panel-blue">
+        <div class="label">STATIC</div>
+        <h2>portfolio-hp</h2>
+        <ul>
+          <li>repo: <span class="mono">/home/itamishotaro/portfolio-hp</span></li>
+          <li>release root: <span class="mono">/var/www/releases/portfolio-hp</span></li>
+          <li>public:
+            <span class="mono">/var/www/html/index.html</span>,
+            <span class="mono">/var/www/html/page2.html</span>
+          </li>
+          <li>最新 release: <span class="mono">20260411000949</span></li>
+        </ul>
+      </div>
+      <div class="card panel-pink">
+        <div class="label">FLASK + SPA</div>
+        <h2>reading-time-tracker</h2>
+        <ul>
+          <li>repo: <span class="mono">/opt/reading-time-tracker/repo</span></li>
+          <li>backend current: <span class="mono">/opt/reading-time-tracker/current</span></li>
+          <li>backend releases: <span class="mono">/opt/reading-time-tracker/releases</span></li>
+          <li>frontend public: <span class="mono">/var/www/html/books</span></li>
+          <li>最新 release: <span class="mono">20260411003055</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">1 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 2</div>
+    <h1>責務分離と実パス</h1>
+    <p class="lead">本番で変化するものを Git 管理配下から外し、repo と runtime を分離する。これが今回の改善の中心で、手戻りや誤操作が起きても被害を局所化できるようにしている。</p>
+    <div class="grid-4">
+      <div class="card panel-blue">
+        <div class="label">REPO</div>
+        <h3>Git 作業コピー</h3>
+        <p class="small"><span class="mono">/home/itamishotaro/portfolio-hp</span><br><span class="mono">/opt/reading-time-tracker/repo</span></p>
+      </div>
+      <div class="card panel-mint">
+        <div class="label">CURRENT</div>
+        <h3>公開中コード</h3>
+        <p class="small"><span class="mono">/opt/reading-time-tracker/current</span><br>portfolio は `index.html` と `page2.html` の symlink で公開。</p>
+      </div>
+      <div class="card panel-gold">
+        <div class="label">DATA</div>
+        <h3>永続データ</h3>
+        <p class="small"><span class="mono">/var/lib/reading-time-tracker/books.db</span><br><span class="mono">/var/backups/reading-time-tracker</span></p>
+      </div>
+      <div class="card panel-pink">
+        <div class="label">CONFIG</div>
+        <h3>本番設定</h3>
+        <p class="small"><span class="mono">/etc/reading-time-tracker/reading-time-tracker.env</span><br>repo 配下に `.env` を置かない。</p>
+      </div>
+    </div>
+    <pre>reading-time-tracker:
+repo      -> /opt/reading-time-tracker/repo
+current   -> /opt/reading-time-tracker/releases/20260411003055
+frontend  -> /var/www/html/books -> /var/www/releases/reading-time-tracker/20260411003055
+db        -> /var/lib/reading-time-tracker/books.db
+env       -> /etc/reading-time-tracker/reading-time-tracker.env
+backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db</pre>
+    <div class="footer">2 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 3</div>
+    <h1>公開経路と Nginx の役割</h1>
+    <p class="lead">Nginx は静的サイト、SPA、API の入口を 1 つにまとめる。`/books/` は frontend release の symlink を返し、`/books/api/` は unix socket 経由で Gunicorn に流す。</p>
+    <div class="grid-3">
+      <div class="card panel-blue">
+        <div class="label">ROUTING</div>
+        <ul>
+          <li><span class="mono">/</span> -> `portfolio-hp`</li>
+          <li><span class="mono">/page2.html</span> -> `portfolio-hp`</li>
+          <li><span class="mono">/books/</span> -> `reading-time-tracker` frontend</li>
+          <li><span class="mono">/books/api/</span> -> `reading-time-tracker` backend</li>
+        </ul>
+      </div>
+      <div class="card panel-mint">
+        <div class="label">RATE LIMIT</div>
+        <ul>
+          <li><span class="mono">/books/api/admin/session</span> は厳しめに制限</li>
+          <li><span class="mono">/books/api/</span> 全体は緩めに制限</li>
+          <li>設定ファイル:
+            <span class="mono">/etc/nginx/conf.d/reading-time-tracker-rate-limit.conf</span>
+          </li>
+        </ul>
+      </div>
+      <div class="card panel-gold">
+        <div class="label">WARNING</div>
+        <ul>
+          <li><span class="mono">proxy_headers_hash</span> の warning は出ている</li>
+          <li>今回の反映では致命傷ではない</li>
+          <li>後日 `nginx.conf` 調整で解消余地あり</li>
+        </ul>
+      </div>
+    </div>
+    <pre>location = /books/api/admin/session {
+    limit_req zone=books_admin_session burst=5 nodelay;
+}
+
+location /books/api/ {
+    limit_req zone=books_api burst=20 nodelay;
+    proxy_pass http://unix:/run/reading-time-tracker/reading-time-tracker.sock;
+}</pre>
+    <div class="footer">3 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 4</div>
+    <h1>systemd と backend runtime</h1>
+    <p class="lead">backend は repo 直参照ではなく `current` を読む。virtualenv も release ごとに作らず、`shared/.venv` を使い回す。これで release 切替と runtime を分離できる。</p>
+    <div class="grid-3">
+      <div class="card panel-pink">
+        <div class="label">SERVICE</div>
+        <ul>
+          <li><span class="mono">reading-time-tracker.service</span></li>
+          <li><span class="mono">WorkingDirectory=/opt/reading-time-tracker/current/backend</span></li>
+          <li><span class="mono">EnvironmentFile=/etc/reading-time-tracker/reading-time-tracker.env</span></li>
+        </ul>
+      </div>
+      <div class="card panel-blue">
+        <div class="label">RUNTIME</div>
+        <ul>
+          <li><span class="mono">ExecStart=/opt/reading-time-tracker/shared/.venv/bin/gunicorn</span></li>
+          <li>workers: 2</li>
+          <li>timeout / graceful-timeout / max-requests 設定済み</li>
+        </ul>
+      </div>
+      <div class="card panel-gold">
+        <div class="label">SOCKET</div>
+        <ul>
+          <li><span class="mono">/run/reading-time-tracker/reading-time-tracker.sock</span></li>
+          <li>Nginx はここへ proxy</li>
+          <li>journald にアクセスログ / エラーログを出す</li>
+        </ul>
+      </div>
+    </div>
+    <pre>sudo systemctl status reading-time-tracker --no-pager -l
+sudo journalctl -u reading-time-tracker -n 200 --no-pager
+curl -I https://itamishotaro.com/books/api/health</pre>
+    <div class="footer">4 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 5</div>
+    <h1>Deploy, Rollback, Restore</h1>
+    <p class="lead">デプロイは release 作成後に symlink を切り替える。rollback は symlink の戻しだけで完結させ、DB restore は service stop を必ず挟む。</p>
+    <div class="grid-3">
+      <div class="card panel-blue">
+        <div class="label">DEPLOY</div>
+        <pre>portfolio-hp:
+git pull
+./deploy/release.sh
+
+reading-time-tracker:
+git pull
+./deploy/release.sh</pre>
+      </div>
+      <div class="card panel-mint">
+        <div class="label">ROLLBACK</div>
+        <pre>frontend:
+ln -sfnT previous /var/www/html/books
+
+backend:
+ln -sfnT previous /opt/reading-time-tracker/current
+systemctl restart reading-time-tracker
+
+portfolio:
+ln -sfnT previous/index.html /var/www/html/index.html</pre>
+      </div>
+      <div class="card panel-pink">
+        <div class="label">RESTORE</div>
+        <pre>systemctl stop reading-time-tracker
+restore backup db
+owner / perm 修正
+systemctl start reading-time-tracker
+curl /books/api/health</pre>
+      </div>
+    </div>
+    <div class="note">重要: 既存ディレクトリを symlink に置き換えるときは <span class="mono">ln -sfnT</span> を使う。単純な <span class="mono">ln -sfn</span> だと既存ディレクトリを置き換えられない。</div>
+    <div class="footer">5 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 6</div>
+    <h1>Backup と Healthcheck</h1>
+    <p class="lead">SQLite backup と healthcheck は timer に寄せた。障害が軽微なら healthcheck が 1 回だけ backend restart を試み、それでも戻らなければ journald に失敗を残す。</p>
+    <div class="grid-2">
+      <div class="card panel-gold">
+        <div class="label">BACKUP</div>
+        <ul>
+          <li>service: <span class="mono">reading-time-tracker-backup.service</span></li>
+          <li>timer: <span class="mono">reading-time-tracker-backup.timer</span></li>
+          <li>方式: <span class="mono">sqlite3 .backup</span></li>
+          <li>保持: 14 日</li>
+          <li>前提: VM に <span class="mono">sqlite3</span> パッケージが必要</li>
+          <li>直近成功: <span class="mono">2026-04-11 00:45:29 JST</span></li>
+        </ul>
+      </div>
+      <div class="card panel-mint">
+        <div class="label">HEALTHCHECK</div>
+        <ul>
+          <li>service: <span class="mono">reading-time-tracker-healthcheck.service</span></li>
+          <li>timer: <span class="mono">reading-time-tracker-healthcheck.timer</span></li>
+          <li>確認対象:
+            <span class="mono">/</span>,
+            <span class="mono">/page2.html</span>,
+            <span class="mono">/books/</span>,
+            <span class="mono">/books/api/health</span>
+          </li>
+          <li><span class="mono">/var/www/html/books</span> symlink も検証</li>
+          <li>直近成功: <span class="mono">2026-04-11 00:40:10 JST</span></li>
+        </ul>
+      </div>
+    </div>
+    <pre>sudo systemctl list-timers --all | grep reading-time-tracker
+sudo systemctl start reading-time-tracker-backup.service
+sudo journalctl -u reading-time-tracker-backup.service -n 50 --no-pager
+sudo journalctl -u reading-time-tracker-healthcheck.service -n 50 --no-pager</pre>
+    <div class="footer">6 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 7</div>
+    <h1>正常系の確認ポイント</h1>
+    <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 4 本、service 1 本、symlink 4 本、backup 1 本を見れば十分です。</p>
+    <div class="grid-2">
+      <div class="card panel-blue">
+        <div class="label">HTTP</div>
+        <pre>curl -I https://itamishotaro.com/
+curl -I https://itamishotaro.com/page2.html
+curl -I https://itamishotaro.com/books/
+curl -I https://itamishotaro.com/books/api/health</pre>
+      </div>
+      <div class="card panel-pink">
+        <div class="label">FILES / SERVICE</div>
+        <pre>systemctl status reading-time-tracker --no-pager -l
+readlink -f /opt/reading-time-tracker/current
+readlink -f /var/www/html/books
+readlink -f /var/www/html/index.html
+readlink -f /var/www/html/page2.html
+ls -1 /var/backups/reading-time-tracker</pre>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:18px">
+      <div class="card panel-blue"><h3>期待</h3><p class="small"><span class="mono">/</span> が 200</p></div>
+      <div class="card panel-mint"><h3>期待</h3><p class="small"><span class="mono">/books/</span> が 200</p></div>
+      <div class="card panel-gold"><h3>期待</h3><p class="small"><span class="mono">/books/api/health</span> が 200</p></div>
+      <div class="card panel-pink"><h3>期待</h3><p class="small">symlink が release を指す</p></div>
+    </div>
+    <div class="footer">7 / 8</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 8</div>
+    <h1>今回の移行で詰まった点</h1>
+    <p class="lead">次回の再発防止のために、実際に詰まった点を運用資料として残す。概念図だけではここが抜けやすい。</p>
+    <div class="grid-2">
+      <div class="card panel-red">
+        <div class="label">ACTUAL PITFALLS</div>
+        <ul>
+          <li><span class="mono">shared/.venv</span> 未作成だと deploy 開始時点で失敗</li>
+          <li><span class="mono">current</span> 未作成で service を切り替えると <span class="mono">status=200/CHDIR</span></li>
+          <li>DB 権限不足だと Alembic が <span class="mono">unable to open database file</span></li>
+          <li><span class="mono">/var/www/html/books</span> が既存ディレクトリだと初回 symlink 化が必要</li>
+          <li>backup service は <span class="mono">sqlite3</span> が無いと失敗</li>
+        </ul>
+      </div>
+      <div class="card panel-gold">
+        <div class="label">OPERATIONS RULE</div>
+        <ul>
+          <li>deploy は repo でだけ実行する</li>
+          <li>DB と env は repo 配下に置かない</li>
+          <li>初回移行や rollback は <span class="mono">ln -sfnT</span> を使う</li>
+          <li><span class="mono">rm -rf /var/www/html/books</span> は使わない</li>
+          <li>障害判断は「最新の healthcheck 成功 / 失敗」で見る</li>
+        </ul>
+      </div>
+    </div>
+    <pre>現行の実測値:
+backend current -> /opt/reading-time-tracker/releases/20260411003055
+frontend books  -> /var/www/releases/reading-time-tracker/20260411003055
+portfolio index -> /var/www/releases/portfolio-hp/20260411000949/index.html
+portfolio page2 -> /var/www/releases/portfolio-hp/20260411000949/page2.html
+backup file     -> /var/backups/reading-time-tracker/books-20260411004529.db</pre>
+    <div class="footer">8 / 8</div>
+  </section>
+</body>
+</html>

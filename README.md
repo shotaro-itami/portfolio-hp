@@ -8,6 +8,8 @@
   - メインの職務経歴ページ
 - `page2.html`
   - 人物紹介の補足ページ
+- `architecture-diagram.html`
+  - GCE 構成図と運用資料
 - `まとめてく.txt`
   - 自分用メモ
 
@@ -40,6 +42,7 @@
 - 公開 symlink:
   - `/var/www/html/index.html`
   - `/var/www/html/page2.html`
+  - `/var/www/html/architecture-diagram.html`
 - ドメイン: `itamishotaro.com`
 - 補助ドメイン: `www.itamishotaro.com`
 - TLS: Cloudflare Origin Certificate
