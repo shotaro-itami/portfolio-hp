@@ -32,9 +32,9 @@ git pull origin main
 ## Rollback
 
 ```bash
-sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/index.html /var/www/html/index.html
-sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/page2.html /var/www/html/page2.html
-sudo ln -sfn /var/www/releases/portfolio-hp/<previous-timestamp>/architecture-diagram.html /var/www/html/architecture-diagram.html
+sudo ln -sfnT /var/www/releases/portfolio-hp/<previous-timestamp>/index.html /var/www/html/index.html
+sudo ln -sfnT /var/www/releases/portfolio-hp/<previous-timestamp>/page2.html /var/www/html/page2.html
+sudo ln -sfnT /var/www/releases/portfolio-hp/<previous-timestamp>/architecture-diagram.html /var/www/html/architecture-diagram.html
 sudo nginx -t
 sudo systemctl reload nginx
 ```

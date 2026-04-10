@@ -26,13 +26,13 @@ rollback() {
   echo "release failed, rolling back portfolio links"
 
   if [[ -n "$PREVIOUS_INDEX" ]]; then
-    sudo ln -sfn "$PREVIOUS_INDEX" "$INDEX_LINK"
+    sudo ln -sfnT "$PREVIOUS_INDEX" "$INDEX_LINK"
   fi
   if [[ -n "$PREVIOUS_PAGE2" ]]; then
-    sudo ln -sfn "$PREVIOUS_PAGE2" "$PAGE2_LINK"
+    sudo ln -sfnT "$PREVIOUS_PAGE2" "$PAGE2_LINK"
   fi
   if [[ -n "$PREVIOUS_ARCHITECTURE" ]]; then
-    sudo ln -sfn "$PREVIOUS_ARCHITECTURE" "$ARCHITECTURE_LINK"
+    sudo ln -sfnT "$PREVIOUS_ARCHITECTURE" "$ARCHITECTURE_LINK"
   fi
 
   sudo nginx -t || true
@@ -57,9 +57,9 @@ PREVIOUS_ARCHITECTURE="$(readlink -f "$ARCHITECTURE_LINK" 2>/dev/null || true)"
 
 sudo mkdir -p "$RELEASES_DIR"
 sudo mv "$WORK_DIR/$TIMESTAMP" "$RELEASE_DIR"
-sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/index.html" "$INDEX_LINK"
-sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/page2.html" "$PAGE2_LINK"
-sudo ln -sfn "$RELEASES_DIR/$TIMESTAMP/architecture-diagram.html" "$ARCHITECTURE_LINK"
+sudo ln -sfnT "$RELEASES_DIR/$TIMESTAMP/index.html" "$INDEX_LINK"
+sudo ln -sfnT "$RELEASES_DIR/$TIMESTAMP/page2.html" "$PAGE2_LINK"
+sudo ln -sfnT "$RELEASES_DIR/$TIMESTAMP/architecture-diagram.html" "$ARCHITECTURE_LINK"
 sudo nginx -t
 sudo systemctl reload nginx
 
