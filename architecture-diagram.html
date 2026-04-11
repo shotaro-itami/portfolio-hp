@@ -6,71 +6,134 @@
   <title>GCE 単一 VM 本番構成図と運用資料</title>
   <style>
     :root {
-      --bg: #08121d;
-      --panel: rgba(9, 24, 40, 0.9);
-      --line: #7ddcff;
-      --text: #f3fbff;
-      --muted: #a8c8d8;
-      --blue: rgba(91, 140, 255, 0.14);
-      --mint: rgba(48, 221, 185, 0.14);
-      --gold: rgba(255, 188, 83, 0.14);
-      --pink: rgba(255, 102, 158, 0.14);
-      --red: rgba(255, 104, 104, 0.14);
+      --bg: #8b86ab;
+      --bg-deep: #7f7a9f;
+      --grid: rgba(255, 255, 255, 0.08);
+      --frame: rgba(247, 244, 255, 0.7);
+      --frame-soft: rgba(247, 244, 255, 0.42);
+      --panel: rgba(115, 111, 150, 0.26);
+      --panel-strong: rgba(106, 102, 142, 0.42);
+      --line: #f8f6ff;
+      --text: #fcfbff;
+      --muted: rgba(249, 247, 255, 0.8);
+      --blue: rgba(255, 255, 255, 0.08);
+      --mint: rgba(238, 255, 255, 0.08);
+      --gold: rgba(255, 249, 228, 0.09);
+      --pink: rgba(255, 242, 249, 0.09);
+      --red: rgba(255, 239, 239, 0.09);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
+      min-height: 100vh;
+      padding: 16px 12px 24px;
       color: var(--text);
       font-family: "Trebuchet MS", "Yu Gothic UI", sans-serif;
       background:
-        linear-gradient(rgba(125, 220, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(125, 220, 255, 0.05) 1px, transparent 1px),
-        radial-gradient(circle at 15% 15%, rgba(48, 221, 185, 0.13), transparent 22%),
-        radial-gradient(circle at 85% 20%, rgba(255, 102, 158, 0.10), transparent 18%),
-        linear-gradient(180deg, #08121d 0%, #102235 100%);
-      background-size: 40px 40px, 40px 40px, auto, auto, auto;
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.15), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.11), transparent 25%),
+        linear-gradient(180deg, #9b96ba 0%, #8984ab 100%);
+      background-size: 22px 22px, 22px 22px, auto, auto, auto;
+      overflow-x: hidden;
     }
 
     .slide {
-      width: 1360px;
+      width: min(1360px, 100%);
       min-height: 760px;
-      margin: 0 auto;
-      padding: 34px 42px 30px;
+      margin: 0 auto 18px;
+      padding: 38px 44px 60px;
       position: relative;
+      overflow: hidden;
+      isolation: isolate;
       page-break-after: always;
+      clip-path: polygon(34px 0, calc(100% - 34px) 0, 100% 34px, 100% calc(100% - 34px), calc(100% - 34px) 100%, 34px 100%, 0 calc(100% - 34px), 0 34px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+        rgba(145, 140, 178, 0.32);
+      background-size: auto, 22px 22px, 22px 22px, auto, auto;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+        0 24px 60px rgba(71, 65, 100, 0.24);
     }
 
     .slide:last-child { page-break-after: auto; }
 
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      z-index: 0;
+      pointer-events: none;
+      clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
+      border: 1px solid rgba(255, 255, 255, 0.56);
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.52)) 50% 18px / 248px 12px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.48)) 50% calc(100% - 18px) / 264px 10px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) 16px 84px / 118px 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 292px) calc(100% - 114px) / 238px 1px no-repeat,
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0 14px, transparent 14px 24px) calc(100% - 82px) 14px / 54px 86px no-repeat,
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.34) 0 16px, transparent 16px 26px) -8px 52% / 122px 56px no-repeat;
+      opacity: 0.95;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 30px 34px;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, rgba(255, 255, 255, 0.72) 0 1.5px, transparent 1.8px) 36px 18px / 38px 36px,
+        radial-gradient(circle, rgba(255, 255, 255, 0.66) 0 1.4px, transparent 1.7px) calc(100% - 110px) 28px / 34px 34px,
+        radial-gradient(circle, rgba(255, 255, 255, 0.62) 0 1.4px, transparent 1.7px) 50% 96px / 28px 28px,
+        radial-gradient(circle, rgba(255, 255, 255, 0.62) 0 1.5px, transparent 1.8px) calc(100% - 204px) calc(100% - 126px) / 40px 36px,
+        linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 190px 102px / 24px 4px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 6px) 48% / 4px 56px no-repeat,
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.48) 0 4px, transparent 4px 12px) 0 calc(100% - 4px) / 382px 10px no-repeat;
+      opacity: 0.5;
+    }
+
+    .slide > * {
+      position: relative;
+      z-index: 1;
+    }
+
     .badge, .label {
       display: inline-block;
-      border: 3px solid var(--line);
-      border-radius: 999px;
-      background: rgba(4, 12, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.66);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
       font-weight: 800;
+      letter-spacing: 0.12em;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     .badge {
       padding: 7px 14px;
       font-size: 12px;
-      letter-spacing: 0.08em;
     }
 
     .label {
       padding: 4px 10px;
       font-size: 12px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    h1 { margin: 14px 0 8px; font-size: 42px; line-height: 1.08; }
+    h1 { margin: 16px 0 10px; font-size: 42px; line-height: 1.08; letter-spacing: 0.03em; }
     h2 { margin: 0 0 10px; font-size: 28px; line-height: 1.12; }
     h3 { margin: 0 0 10px; font-size: 21px; }
 
     .lead, .small, .note {
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.68;
     }
 
     .lead {
@@ -92,17 +155,22 @@
 
     .card {
       padding: 20px 22px;
-      border: 4px solid var(--line);
-      border-radius: 28px;
-      background: var(--panel);
-      box-shadow: inset 0 0 0 1px rgba(125, 220, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+        var(--panel);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 16px 30px rgba(90, 84, 119, 0.14);
+      backdrop-filter: blur(3px);
     }
 
-    .panel-blue { background: linear-gradient(180deg, var(--blue), var(--panel)); }
-    .panel-mint { background: linear-gradient(180deg, var(--mint), var(--panel)); }
-    .panel-gold { background: linear-gradient(180deg, var(--gold), var(--panel)); }
-    .panel-pink { background: linear-gradient(180deg, var(--pink), var(--panel)); }
-    .panel-red { background: linear-gradient(180deg, var(--red), var(--panel)); }
+    .panel-blue { background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)), rgba(117, 113, 152, 0.24); }
+    .panel-mint { background: linear-gradient(180deg, rgba(240, 255, 255, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
+    .panel-gold { background: linear-gradient(180deg, rgba(255, 252, 236, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
+    .panel-pink { background: linear-gradient(180deg, rgba(255, 246, 251, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
+    .panel-red { background: linear-gradient(180deg, rgba(255, 241, 241, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
 
     .flow {
       display: flex;
@@ -114,24 +182,25 @@
 
     .bubble {
       padding: 11px 18px;
-      border: 3px solid var(--line);
-      border-radius: 999px;
-      background: rgba(6, 17, 30, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
       font-weight: 800;
       font-size: 15px;
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
     }
 
     .arrow {
       font-size: 28px;
       font-weight: 900;
-      color: var(--line);
+      color: rgba(255, 255, 255, 0.8);
     }
 
     ul {
       margin: 0;
       padding-left: 20px;
       font-size: 15px;
-      line-height: 1.55;
+      line-height: 1.58;
     }
 
     li + li { margin-top: 5px; }
@@ -139,14 +208,15 @@
     pre {
       margin: 12px 0 0;
       padding: 15px 17px;
-      border: 3px solid var(--line);
-      border-radius: 20px;
-      background: rgba(4, 12, 22, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 16px;
+      background: rgba(104, 99, 138, 0.38);
       color: var(--text);
       white-space: pre-wrap;
       font-family: Consolas, "Courier New", monospace;
       font-size: 13px;
-      line-height: 1.48;
+      line-height: 1.52;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     .mono {
@@ -160,6 +230,193 @@
       bottom: 20px;
       color: var(--muted);
       font-size: 13px;
+      letter-spacing: 0.16em;
+    }
+
+    .flowchart-shell {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: 18px;
+      background: rgba(104, 99, 138, 0.28);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .flowchart-svg {
+      display: block;
+      width: 100%;
+      min-width: 920px;
+      height: auto;
+    }
+
+    .flowchart-legend {
+      margin-top: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+      .slide::before {
+        background-size:
+          200px 10px,
+          220px 8px,
+          96px 1px,
+          180px 1px,
+          54px 74px,
+          96px 46px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 10px 10px 20px;
+        background-size: 18px 18px, 18px 18px, auto, auto, auto;
+      }
+
+      .slide {
+        min-height: auto;
+        padding: 26px 18px 54px;
+        clip-path: polygon(22px 0, calc(100% - 22px) 0, 100% 22px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 22px 100%, 0 calc(100% - 22px), 0 22px);
+      }
+
+      .slide::before {
+        inset: 12px;
+        clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
+      }
+
+      .slide::after {
+        inset: 22px;
+        opacity: 0.32;
+      }
+
+      h1 { font-size: 34px; }
+      h2 { font-size: 24px; }
+      h3 { font-size: 19px; }
+
+      .lead {
+        font-size: 16px;
+        max-width: none;
+      }
+
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .flow {
+        gap: 10px;
+      }
+
+      .arrow {
+        width: 100%;
+        text-align: center;
+        line-height: 1;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .flowchart-svg {
+        min-width: 820px;
+      }
+
+      pre {
+        padding: 14px;
+        font-size: 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .footer {
+        right: 18px;
+        bottom: 16px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 8px 8px 16px;
+      }
+
+      .slide {
+        padding: 18px 14px 50px;
+        clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+      }
+
+      .slide::before {
+        inset: 8px;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)) 50% 12px / 148px 8px no-repeat,
+          linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 50% calc(100% - 12px) / 160px 7px no-repeat;
+      }
+
+      .slide::after {
+        display: none;
+      }
+
+      .badge, .label {
+        font-size: 11px;
+      }
+
+      .small,
+      .note,
+      .mono {
+        font-size: 12px;
+      }
+
+      h1 {
+        margin-top: 12px;
+        font-size: 28px;
+        line-height: 1.16;
+      }
+
+      h2 { font-size: 22px; }
+      h3 { font-size: 18px; }
+
+      .lead {
+        margin-bottom: 18px;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .flowchart-shell {
+        padding: 10px;
+        border-radius: 14px;
+      }
+
+      .flowchart-svg {
+        min-width: 700px;
+      }
+
+      .flow {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 18px;
+      }
+
+      .bubble {
+        width: 100%;
+        padding: 10px 14px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .arrow {
+        font-size: 22px;
+        transform: rotate(90deg);
+      }
+
+      ul {
+        padding-left: 18px;
+        font-size: 14px;
+      }
+
+      .footer {
+        position: static;
+        margin-top: 14px;
+        text-align: right;
+      }
     }
   </style>
 </head>
@@ -201,11 +458,102 @@
         </ul>
       </div>
     </div>
-    <div class="footer">1 / 8</div>
+    <div class="footer">1 / 9</div>
   </section>
 
   <section class="slide">
     <div class="badge">SLIDE 2</div>
+    <h1>通信と公開経路のフローチャート</h1>
+    <p class="lead">入口から静的ページ、SPA、API、DB までの流れを 1 枚にまとめた。Cloudflare と Nginx で入口を統一しつつ、`portfolio-hp` と `reading-time-tracker` の役割を分けている。</p>
+    <div class="flowchart-shell">
+      <svg class="flowchart-svg" viewBox="0 0 1200 520" role="img" aria-label="GCE 単一 VM の通信フローチャート">
+        <defs>
+          <linearGradient id="flowBox" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.16)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
+          </linearGradient>
+          <marker id="flowArrow" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">
+            <path d="M0,0 L14,7 L0,14 Z" fill="rgba(255,255,255,0.78)"></path>
+          </marker>
+          <style>
+            .flow-box { fill: url(#flowBox); stroke: rgba(255,255,255,0.72); stroke-width: 2; }
+            .flow-box-strong { fill: rgba(255,255,255,0.12); stroke: rgba(255,255,255,0.86); stroke-width: 2; }
+            .flow-text { fill: #fcfbff; font: 700 22px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
+            .flow-sub { fill: rgba(252,251,255,0.82); font: 500 15px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
+            .flow-note { fill: rgba(252,251,255,0.76); font: 600 14px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; letter-spacing: 0.08em; }
+            .flow-line { stroke: rgba(255,255,255,0.78); stroke-width: 4; fill: none; marker-end: url(#flowArrow); }
+            .flow-split { stroke: rgba(255,255,255,0.52); stroke-width: 3; fill: none; marker-end: url(#flowArrow); }
+            .flow-dash { stroke-dasharray: 8 8; }
+          </style>
+        </defs>
+
+        <rect class="flow-box-strong" x="46" y="180" width="180" height="100" rx="18" ry="18"></rect>
+        <text class="flow-text" x="136" y="222" text-anchor="middle">User</text>
+        <text class="flow-sub" x="136" y="248" text-anchor="middle">Browser / Mobile</text>
+
+        <rect class="flow-box" x="282" y="180" width="200" height="100" rx="18" ry="18"></rect>
+        <text class="flow-text" x="382" y="218" text-anchor="middle">Cloudflare</text>
+        <text class="flow-sub" x="382" y="244" text-anchor="middle">DNS / TLS / Edge</text>
+        <text class="flow-sub" x="382" y="266" text-anchor="middle">WAF / Cache</text>
+
+        <rect class="flow-box-strong" x="546" y="152" width="234" height="156" rx="18" ry="18"></rect>
+        <text class="flow-note" x="664" y="182" text-anchor="middle">GCE UBUNTU VM</text>
+        <rect class="flow-box" x="574" y="198" width="178" height="82" rx="18" ry="18"></rect>
+        <text class="flow-text" x="663" y="230" text-anchor="middle">Nginx</text>
+        <text class="flow-sub" x="663" y="254" text-anchor="middle">Single entrypoint</text>
+
+        <rect class="flow-box" x="868" y="54" width="264" height="96" rx="18" ry="18"></rect>
+        <text class="flow-text" x="1000" y="90" text-anchor="middle">portfolio-hp</text>
+        <text class="flow-sub" x="1000" y="114" text-anchor="middle">/ , /page2.html</text>
+        <text class="flow-sub" x="1000" y="136" text-anchor="middle">/var/www/html/*.html</text>
+
+        <rect class="flow-box" x="868" y="212" width="264" height="96" rx="18" ry="18"></rect>
+        <text class="flow-text" x="1000" y="248" text-anchor="middle">SPA Frontend</text>
+        <text class="flow-sub" x="1000" y="272" text-anchor="middle">/books/</text>
+        <text class="flow-sub" x="1000" y="294" text-anchor="middle">/var/www/html/books</text>
+
+        <rect class="flow-box" x="868" y="370" width="264" height="96" rx="18" ry="18"></rect>
+        <text class="flow-text" x="1000" y="406" text-anchor="middle">Flask API</text>
+        <text class="flow-sub" x="1000" y="430" text-anchor="middle">/books/api/</text>
+        <text class="flow-sub" x="1000" y="452" text-anchor="middle">Gunicorn via unix socket</text>
+
+        <rect class="flow-box" x="546" y="372" width="234" height="94" rx="18" ry="18"></rect>
+        <text class="flow-text" x="663" y="408" text-anchor="middle">SQLite / Backup</text>
+        <text class="flow-sub" x="663" y="432" text-anchor="middle">books.db / backup timer</text>
+
+        <path class="flow-line" d="M226 230 H282"></path>
+        <path class="flow-line" d="M482 230 H546"></path>
+        <path class="flow-line" d="M780 230 H868"></path>
+        <path class="flow-split" d="M752 230 C816 230, 816 102, 868 102"></path>
+        <path class="flow-split" d="M752 230 C816 230, 816 418, 868 418"></path>
+        <path class="flow-line" d="M1000 308 V348"></path>
+        <path class="flow-line flow-dash" d="M868 418 H780"></path>
+        <path class="flow-line flow-dash" d="M663 372 V308"></path>
+
+        <text class="flow-note" x="816" y="82">STATIC</text>
+        <text class="flow-note" x="816" y="242">SPA</text>
+        <text class="flow-note" x="816" y="400">API</text>
+      </svg>
+    </div>
+    <div class="grid-3 flowchart-legend">
+      <div class="card panel-blue">
+        <div class="label">INGRESS</div>
+        <p class="small">すべての公開トラフィックは <span class="mono">Cloudflare → GCE VM → Nginx</span> を通る。</p>
+      </div>
+      <div class="card panel-mint">
+        <div class="label">FRONTEND</div>
+        <p class="small"><span class="mono">/</span> と <span class="mono">/page2.html</span> は静的 HTML、<span class="mono">/books/</span> は SPA を返す。</p>
+      </div>
+      <div class="card panel-gold">
+        <div class="label">BACKEND</div>
+        <p class="small"><span class="mono">/books/api/</span> は Gunicorn に流し、最終的に SQLite と backup 運用へつながる。</p>
+      </div>
+    </div>
+    <div class="footer">2 / 9</div>
+  </section>
+
+  <section class="slide">
+    <div class="badge">SLIDE 3</div>
     <h1>責務分離と実パス</h1>
     <p class="lead">本番で変化するものを Git 管理配下から外し、repo と runtime を分離する。これが今回の改善の中心で、手戻りや誤操作が起きても被害を局所化できるようにしている。</p>
     <div class="grid-4">
@@ -237,11 +585,11 @@ frontend  -> /var/www/html/books -> /var/www/releases/reading-time-tracker/20260
 db        -> /var/lib/reading-time-tracker/books.db
 env       -> /etc/reading-time-tracker/reading-time-tracker.env
 backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db</pre>
-    <div class="footer">2 / 8</div>
+    <div class="footer">3 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 3</div>
+    <div class="badge">SLIDE 4</div>
     <h1>公開経路と Nginx の役割</h1>
     <p class="lead">Nginx は静的サイト、SPA、API の入口を 1 つにまとめる。`/books/` は frontend release の symlink を返し、`/books/api/` は unix socket 経由で Gunicorn に流す。</p>
     <div class="grid-3">
@@ -281,11 +629,11 @@ location /books/api/ {
     limit_req zone=books_api burst=20 nodelay;
     proxy_pass http://unix:/run/reading-time-tracker/reading-time-tracker.sock;
 }</pre>
-    <div class="footer">3 / 8</div>
+    <div class="footer">4 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 4</div>
+    <div class="badge">SLIDE 5</div>
     <h1>systemd と backend runtime</h1>
     <p class="lead">backend は repo 直参照ではなく `current` を読む。virtualenv も release ごとに作らず、`shared/.venv` を使い回す。これで release 切替と runtime を分離できる。</p>
     <div class="grid-3">
@@ -317,11 +665,11 @@ location /books/api/ {
     <pre>sudo systemctl status reading-time-tracker --no-pager -l
 sudo journalctl -u reading-time-tracker -n 200 --no-pager
 curl -I https://itamishotaro.com/books/api/health</pre>
-    <div class="footer">4 / 8</div>
+    <div class="footer">5 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 5</div>
+    <div class="badge">SLIDE 6</div>
     <h1>Deploy, Rollback, Restore</h1>
     <p class="lead">デプロイは release 作成後に symlink を切り替える。rollback は symlink の戻しだけで完結させ、DB restore は service stop を必ず挟む。</p>
     <div class="grid-3">
@@ -357,11 +705,11 @@ curl /books/api/health</pre>
       </div>
     </div>
     <div class="note">重要: 既存ディレクトリを symlink に置き換えるときは <span class="mono">ln -sfnT</span> を使う。単純な <span class="mono">ln -sfn</span> だと既存ディレクトリを置き換えられない。</div>
-    <div class="footer">5 / 8</div>
+    <div class="footer">6 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 6</div>
+    <div class="badge">SLIDE 7</div>
     <h1>Backup と Healthcheck</h1>
     <p class="lead">SQLite backup と healthcheck は timer に寄せた。障害が軽微なら healthcheck が 1 回だけ backend restart を試み、それでも戻らなければ journald に失敗を残す。</p>
     <div class="grid-2">
@@ -396,11 +744,11 @@ curl /books/api/health</pre>
 sudo systemctl start reading-time-tracker-backup.service
 sudo journalctl -u reading-time-tracker-backup.service -n 50 --no-pager
 sudo journalctl -u reading-time-tracker-healthcheck.service -n 50 --no-pager</pre>
-    <div class="footer">6 / 8</div>
+    <div class="footer">7 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 7</div>
+    <div class="badge">SLIDE 8</div>
     <h1>正常系の確認ポイント</h1>
     <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 4 本、service 1 本、symlink 4 本、backup 1 本を見れば十分です。</p>
     <div class="grid-2">
@@ -427,11 +775,11 @@ ls -1 /var/backups/reading-time-tracker</pre>
       <div class="card panel-gold"><h3>期待</h3><p class="small"><span class="mono">/books/api/health</span> が 200</p></div>
       <div class="card panel-pink"><h3>期待</h3><p class="small">symlink が release を指す</p></div>
     </div>
-    <div class="footer">7 / 8</div>
+    <div class="footer">8 / 9</div>
   </section>
 
   <section class="slide">
-    <div class="badge">SLIDE 8</div>
+    <div class="badge">SLIDE 9</div>
     <h1>今回の移行で詰まった点</h1>
     <p class="lead">次回の再発防止のために、実際に詰まった点を運用資料として残す。概念図だけではここが抜けやすい。</p>
     <div class="grid-2">
@@ -462,7 +810,7 @@ frontend books  -> /var/www/releases/reading-time-tracker/20260411003055
 portfolio index -> /var/www/releases/portfolio-hp/20260411000949/index.html
 portfolio page2 -> /var/www/releases/portfolio-hp/20260411000949/page2.html
 backup file     -> /var/backups/reading-time-tracker/books-20260411004529.db</pre>
-    <div class="footer">8 / 8</div>
+    <div class="footer">9 / 9</div>
   </section>
 </body>
 </html>
