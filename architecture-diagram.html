@@ -6,21 +6,21 @@
   <title>GCE 単一 VM 本番構成図と運用資料</title>
   <style>
     :root {
-      --bg: #8b86ab;
-      --bg-deep: #7f7a9f;
-      --grid: rgba(255, 255, 255, 0.08);
-      --frame: rgba(247, 244, 255, 0.7);
-      --frame-soft: rgba(247, 244, 255, 0.42);
-      --panel: rgba(115, 111, 150, 0.26);
-      --panel-strong: rgba(106, 102, 142, 0.42);
-      --line: #f8f6ff;
+      --bg: #726b95;
+      --bg-deep: #595277;
+      --grid: rgba(255, 255, 255, 0.05);
+      --frame: rgba(255, 255, 255, 0.8);
+      --frame-soft: rgba(255, 255, 255, 0.28);
+      --panel: rgba(58, 52, 86, 0.82);
+      --panel-strong: rgba(45, 40, 69, 0.88);
+      --line: #ffffff;
       --text: #fcfbff;
-      --muted: rgba(249, 247, 255, 0.8);
-      --blue: rgba(255, 255, 255, 0.08);
-      --mint: rgba(238, 255, 255, 0.08);
-      --gold: rgba(255, 249, 228, 0.09);
-      --pink: rgba(255, 242, 249, 0.09);
-      --red: rgba(255, 239, 239, 0.09);
+      --muted: rgba(245, 243, 255, 0.92);
+      --blue: rgba(92, 120, 184, 0.28);
+      --mint: rgba(84, 148, 162, 0.24);
+      --gold: rgba(166, 134, 72, 0.24);
+      --pink: rgba(155, 96, 128, 0.24);
+      --red: rgba(168, 88, 88, 0.24);
     }
 
     * { box-sizing: border-box; }
@@ -34,9 +34,9 @@
       background:
         linear-gradient(var(--grid) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid) 1px, transparent 1px),
-        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.15), transparent 28%),
-        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.11), transparent 25%),
-        linear-gradient(180deg, #9b96ba 0%, #8984ab 100%);
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.09), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.07), transparent 25%),
+        linear-gradient(180deg, #7d76a2 0%, #665f88 100%);
       background-size: 22px 22px, 22px 22px, auto, auto, auto;
       overflow-x: hidden;
     }
@@ -53,15 +53,15 @@
       clip-path: polygon(34px 0, calc(100% - 34px) 0, 100% 34px, 100% calc(100% - 34px), calc(100% - 34px) 100%, 34px 100%, 0 calc(100% - 34px), 0 34px);
       border: 1px solid rgba(255, 255, 255, 0.24);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
-        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
-        rgba(145, 140, 178, 0.32);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+        rgba(58, 52, 86, 0.78);
       background-size: auto, 22px 22px, 22px 22px, auto, auto;
       box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.16),
-        0 24px 60px rgba(71, 65, 100, 0.24);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 24px 60px rgba(41, 35, 63, 0.28);
     }
 
     .slide:last-child { page-break-after: auto; }
@@ -81,7 +81,7 @@
         linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 292px) calc(100% - 114px) / 238px 1px no-repeat,
         repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0 14px, transparent 14px 24px) calc(100% - 82px) 14px / 54px 86px no-repeat,
         repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.34) 0 16px, transparent 16px 26px) -8px 52% / 122px 56px no-repeat;
-      opacity: 0.95;
+      opacity: 0.42;
     }
 
     .slide::after {
@@ -98,7 +98,7 @@
         linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 190px 102px / 24px 4px no-repeat,
         linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 6px) 48% / 4px 56px no-repeat,
         repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.48) 0 4px, transparent 4px 12px) 0 calc(100% - 4px) / 382px 10px no-repeat;
-      opacity: 0.5;
+      opacity: 0.18;
     }
 
     .slide > * {
@@ -110,7 +110,7 @@
       display: inline-block;
       border: 1px solid rgba(255, 255, 255, 0.66);
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(33, 29, 51, 0.72);
       font-weight: 800;
       letter-spacing: 0.12em;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -127,22 +127,22 @@
       margin-bottom: 10px;
     }
 
-    h1 { margin: 16px 0 10px; font-size: 42px; line-height: 1.08; letter-spacing: 0.03em; }
-    h2 { margin: 0 0 10px; font-size: 28px; line-height: 1.12; }
-    h3 { margin: 0 0 10px; font-size: 21px; }
+    h1 { margin: 16px 0 12px; font-size: 44px; line-height: 1.12; letter-spacing: 0.02em; }
+    h2 { margin: 0 0 12px; font-size: 30px; line-height: 1.18; }
+    h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.22; }
 
     .lead, .small, .note {
       color: var(--muted);
-      line-height: 1.68;
+      line-height: 1.76;
     }
 
     .lead {
       margin: 0 0 24px;
       max-width: 1220px;
-      font-size: 18px;
+      font-size: 19px;
     }
 
-    .small, .note { font-size: 14px; }
+    .small, .note { font-size: 15px; }
 
     .grid-2, .grid-3, .grid-4 {
       display: grid;
@@ -158,19 +158,19 @@
       border: 1px solid rgba(255, 255, 255, 0.42);
       border-radius: 18px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)),
         var(--panel);
       box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-        0 16px 30px rgba(90, 84, 119, 0.14);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 12px 28px rgba(30, 24, 48, 0.18);
       backdrop-filter: blur(3px);
     }
 
-    .panel-blue { background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)), rgba(117, 113, 152, 0.24); }
-    .panel-mint { background: linear-gradient(180deg, rgba(240, 255, 255, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
-    .panel-gold { background: linear-gradient(180deg, rgba(255, 252, 236, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
-    .panel-pink { background: linear-gradient(180deg, rgba(255, 246, 251, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
-    .panel-red { background: linear-gradient(180deg, rgba(255, 241, 241, 0.1), rgba(255, 255, 255, 0.03)), rgba(121, 117, 156, 0.24); }
+    .panel-blue { background: linear-gradient(180deg, rgba(92, 120, 184, 0.34), rgba(58, 52, 86, 0.96)); }
+    .panel-mint { background: linear-gradient(180deg, rgba(84, 148, 162, 0.3), rgba(58, 52, 86, 0.96)); }
+    .panel-gold { background: linear-gradient(180deg, rgba(166, 134, 72, 0.28), rgba(58, 52, 86, 0.96)); }
+    .panel-pink { background: linear-gradient(180deg, rgba(155, 96, 128, 0.28), rgba(58, 52, 86, 0.96)); }
+    .panel-red { background: linear-gradient(180deg, rgba(168, 88, 88, 0.28), rgba(58, 52, 86, 0.96)); }
 
     .flow {
       display: flex;
@@ -184,9 +184,9 @@
       padding: 11px 18px;
       border: 1px solid rgba(255, 255, 255, 0.55);
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(34, 30, 53, 0.8);
       font-weight: 800;
-      font-size: 15px;
+      font-size: 16px;
       clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
     }
 
@@ -199,8 +199,8 @@
     ul {
       margin: 0;
       padding-left: 20px;
-      font-size: 15px;
-      line-height: 1.58;
+      font-size: 16px;
+      line-height: 1.72;
     }
 
     li + li { margin-top: 5px; }
@@ -210,18 +210,18 @@
       padding: 15px 17px;
       border: 1px solid rgba(255, 255, 255, 0.42);
       border-radius: 16px;
-      background: rgba(104, 99, 138, 0.38);
+      background: rgba(28, 24, 45, 0.92);
       color: var(--text);
       white-space: pre-wrap;
       font-family: Consolas, "Courier New", monospace;
-      font-size: 13px;
-      line-height: 1.52;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      line-height: 1.62;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
     }
 
     .mono {
       font-family: Consolas, "Courier New", monospace;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .footer {
@@ -238,7 +238,7 @@
       padding: 14px;
       border: 1px solid rgba(255, 255, 255, 0.38);
       border-radius: 18px;
-      background: rgba(104, 99, 138, 0.28);
+      background: rgba(37, 32, 57, 0.9);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -469,18 +469,18 @@
       <svg class="flowchart-svg" viewBox="0 0 1200 520" role="img" aria-label="GCE 単一 VM の通信フローチャート">
         <defs>
           <linearGradient id="flowBox" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.16)"/>
-            <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
+            <stop offset="0%" stop-color="rgba(68,62,98,0.96)"/>
+            <stop offset="100%" stop-color="rgba(45,40,69,0.96)"/>
           </linearGradient>
           <marker id="flowArrow" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">
             <path d="M0,0 L14,7 L0,14 Z" fill="rgba(255,255,255,0.78)"></path>
           </marker>
           <style>
-            .flow-box { fill: url(#flowBox); stroke: rgba(255,255,255,0.72); stroke-width: 2; }
-            .flow-box-strong { fill: rgba(255,255,255,0.12); stroke: rgba(255,255,255,0.86); stroke-width: 2; }
-            .flow-text { fill: #fcfbff; font: 700 22px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
-            .flow-sub { fill: rgba(252,251,255,0.82); font: 500 15px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
-            .flow-note { fill: rgba(252,251,255,0.76); font: 600 14px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; letter-spacing: 0.08em; }
+            .flow-box { fill: url(#flowBox); stroke: rgba(255,255,255,0.82); stroke-width: 2.2; }
+            .flow-box-strong { fill: rgba(34,30,53,0.88); stroke: rgba(255,255,255,0.9); stroke-width: 2.2; }
+            .flow-text { fill: #ffffff; font: 700 24px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
+            .flow-sub { fill: rgba(252,251,255,0.9); font: 500 17px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
+            .flow-note { fill: rgba(252,251,255,0.88); font: 600 15px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; letter-spacing: 0.08em; }
             .flow-line { stroke: rgba(255,255,255,0.78); stroke-width: 4; fill: none; marker-end: url(#flowArrow); }
             .flow-split { stroke: rgba(255,255,255,0.52); stroke-width: 3; fill: none; marker-end: url(#flowArrow); }
             .flow-dash { stroke-dasharray: 8 8; }
