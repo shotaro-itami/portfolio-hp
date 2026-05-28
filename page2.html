@@ -6,225 +6,995 @@
   <title>人物紹介 | 2枚目ページ</title>
   <style>
     :root {
-      --bg-1: #f3f0e8;
-      --bg-2: #dbe6dc;
-      --ink: #1c2a21;
-      --accent: #a33e2f;
-      --line: #355a45;
-      --paper: #fffdf8;
-      --paper-2: #f7f5ef;
+      --bg: #0d1117;
+      --bg-soft: #141b24;
+      --panel: rgba(17, 24, 34, 0.78);
+      --panel-strong: rgba(12, 18, 27, 0.92);
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.2);
+      --text: #f3f6fb;
+      --muted: #aab7c8;
+      --accent: #f08a24;
+      --accent-2: #4fd1c5;
+      --glow: rgba(240, 138, 36, 0.18);
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
+      --radius: 26px;
+      --radius-sm: 18px;
+      --max: 1180px;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      color: var(--ink);
-      line-height: 1.8;
-      font-family: "Hiragino Mincho ProN", "Yu Mincho", "BIZ UDPMincho", serif;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(163,62,47,.14), transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(53,90,69,.15), transparent 45%),
-        linear-gradient(120deg, var(--bg-1), var(--bg-2));
       min-height: 100vh;
+      color: var(--text);
+      font-family: "Inter", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(79, 209, 197, 0.12), transparent 28%),
+        radial-gradient(circle at 80% 0%, rgba(240, 138, 36, 0.12), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(97, 76, 211, 0.1), transparent 30%),
+        linear-gradient(180deg, #0b1016 0%, #121926 48%, #0d1117 100%);
+      overflow-x: hidden;
     }
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 28px 18px 60px;
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+      opacity: 0.45;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(79, 209, 197, 0.12), rgba(240, 138, 36, 0.08), transparent 68%);
+      transform: translate3d(-50%, -50%, 0);
+      filter: blur(18px);
+      z-index: 0;
+      opacity: 0.9;
+    }
+
+    .page {
       position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 20px 96px;
     }
-    .sticker {
-      position: absolute;
-      padding: 6px 10px;
-      border: 1px dashed var(--line);
-      background: #fffaf2;
-      border-radius: 10px;
-      font-size: .85rem;
-      transform: rotate(-6deg);
-      top: 4px;
-      right: 22px;
-    }
-    h1, h2, h3 {
-      line-height: 1.35;
-      margin: 0 0 8px;
-    }
-    h1 { font-size: clamp(1.4rem, 2.8vw, 2rem); }
-    h2 { font-size: clamp(1.05rem, 2.4vw, 1.35rem); }
-    .lead {
-      margin: 14px 0 20px;
-      padding: 16px;
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+      padding: 12px 16px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255, 253, 248, .75);
-      backdrop-filter: blur(1px);
+      border-radius: 999px;
+      background: rgba(8, 12, 18, 0.6);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     }
-    .grid {
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-    .card {
-      background: var(--paper);
-      border: 1px solid var(--line);
+      place-items: center;
       border-radius: 14px;
-      padding: 16px;
-      box-shadow: 4px 4px 0 rgba(28,42,33,.12);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, rgba(240, 138, 36, 0.25), rgba(79, 209, 197, 0.18));
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
-    .card:nth-child(2n) {
-      background: var(--paper-2);
-      transform: rotate(-.4deg);
+
+    .brand-copy strong,
+    .brand-copy span {
+      display: block;
+      white-space: nowrap;
     }
-    .card:nth-child(3n) {
-      transform: rotate(.5deg);
+
+    .brand-copy strong {
+      font-size: 0.95rem;
     }
-    .kv {
+
+    .brand-copy span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 8px;
+      justify-content: flex-end;
     }
-    .kv span {
-      display: inline-block;
+
+    .nav a,
+    .nav button,
+    .link-chip,
+    .primary-link {
+      appearance: none;
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 4px 10px;
-      font-size: .92rem;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      padding: 10px 14px;
+      font: inherit;
+      text-decoration: none;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+      cursor: pointer;
     }
-    .quote {
-      border-left: 4px solid var(--accent);
-      padding-left: 10px;
-      margin: 10px 0 0;
-      font-weight: 600;
+
+    .nav a:hover,
+    .nav button:hover,
+    .link-chip:hover,
+    .primary-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.08);
     }
-    .quirk {
-      display: inline-block;
-      transform-origin: 50% 100%;
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .hobby-grid {
+
+    .hero {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
     }
-    .hobby {
-      border: 1px dashed var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      background: #fff;
+
+    .hero-copy,
+    .hero-panel,
+    .section,
+    .story-card,
+    .timeline-card,
+    .hobby-card,
+    .links-panel {
       position: relative;
       overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
     }
-    .hobby::after {
-      content: "";
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      right: -8px;
-      bottom: -8px;
-      background: rgba(163,62,47,.18);
+
+    .hero-copy {
+      padding: 34px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    a {
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px solid var(--ink);
-    }
-    a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-    .small { font-size: .92rem; opacity: .88; }
-    .project-link {
+
+    .eyebrow,
+    .section-label {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      margin-top: 10px;
-      padding: 10px 14px;
-      border: 1px solid var(--accent);
+      gap: 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .eyebrow::before,
+    .section-label::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    h1 {
+      margin: 14px 0 14px;
+      font-size: clamp(2.6rem, 6vw, 5.8rem);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-copy p {
+      max-width: 52ch;
+      margin: 0;
+      font-size: 1.04rem;
+      color: #d6deea;
+    }
+
+    .hero-accent {
+      color: #ffd7a9;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .primary-link {
+      background: linear-gradient(135deg, rgba(240, 138, 36, 0.22), rgba(240, 138, 36, 0.08));
+      border-color: rgba(240, 138, 36, 0.36);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      padding: 14px 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: clamp(1.4rem, 2vw, 2.2rem);
+      line-height: 1;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .hero-panel {
+      padding: 24px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(19, 27, 38, 0.96), rgba(8, 12, 18, 0.82));
+    }
+
+    .hero-panel::before,
+    .section::before,
+    .story-card::before,
+    .timeline-card::before,
+    .hobby-card::before,
+    .links-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -55% auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: var(--glow);
+      filter: blur(10px);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid rgba(79, 209, 197, 0.22);
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(163,62,47,.14), rgba(255,250,242,.95));
-      font-weight: 700;
+      color: #cafaf2;
+      background: rgba(79, 209, 197, 0.08);
+      font-size: 0.84rem;
     }
-    @keyframes tremble {
-      0%, 100% { transform: translateX(0) rotate(0); }
-      25% { transform: translateX(.7px) rotate(.4deg); }
-      50% { transform: translateX(-.8px) rotate(-.35deg); }
-      75% { transform: translateX(.4px) rotate(.2deg); }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 8px rgba(79, 209, 197, 0.12);
+      animation: pulse 1.9s infinite;
     }
-    @media (min-width: 860px) {
-      .grid { grid-template-columns: 1fr 1fr; }
-      .lead { padding: 20px; }
+
+    .profile-list {
+      display: grid;
+      gap: 12px;
     }
-    @media (max-width: 560px) {
-      .hobby-grid { grid-template-columns: 1fr; }
-      .sticker { position: static; display: inline-block; margin-bottom: 10px; }
+
+    .profile-item {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .profile-item:last-child {
+      border-bottom: 0;
+    }
+
+    .profile-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .profile-item strong {
+      text-align: right;
+      font-size: 0.96rem;
+    }
+
+    .quote-panel {
+      margin-top: auto;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .quote-panel p {
+      margin: 0;
+      font-size: 1.05rem;
+      color: #f5f7fa;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .section {
+      padding: 28px;
+    }
+
+    .section h2 {
+      margin: 10px 0 10px;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .section-intro {
+      margin: 0 0 24px;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    .story-grid,
+    .timeline,
+    .hobby-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .story-card,
+    .timeline-card,
+    .hobby-card,
+    .links-panel {
+      padding: 22px;
+      background: rgba(9, 14, 21, 0.72);
+    }
+
+    .story-card h3,
+    .timeline-card h3,
+    .hobby-card h3,
+    .links-panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.04rem;
+      letter-spacing: -0.02em;
+    }
+
+    .story-card p,
+    .timeline-card p,
+    .hobby-card p,
+    .links-panel p {
+      margin: 0;
+      color: #d6deea;
+    }
+
+    .story-card strong {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #ffd7a9;
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .timeline-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .timeline-num {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffd7a9;
+      font-weight: 800;
+    }
+
+    .hobby-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hobby-card {
+      min-height: 164px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+      transform-style: preserve-3d;
+    }
+
+    .hobby-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(17, 25, 38, 0.92);
+    }
+
+    .hobby-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .emoji {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .links-panel {
+      margin-top: 14px;
+    }
+
+    .link-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .link-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+    }
+
+    .link-chip small {
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px) scale(0.985);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.9); opacity: 0.72; }
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding-inline: 14px;
+        padding-bottom: 72px;
+      }
+
+      .topbar {
+        position: static;
+        border-radius: 24px;
+        padding: 14px;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .hero-copy,
+      .hero-panel,
+      .section,
+      .story-card,
+      .timeline-card,
+      .hobby-card,
+      .links-panel {
+        border-radius: 22px;
+      }
+
+      .hero-copy {
+        min-height: auto;
+        padding: 24px;
+      }
+
+      .hero-stats,
+      .hobby-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      .cursor-glow {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="sticker">補足情報</div>
+  <div class="cursor-glow" aria-hidden="true"></div>
 
-    <h1>人物紹介（2枚目）</h1>
-    <div class="lead">
-      本ページは、人物像を簡潔に示すための補足情報です。文面は実務的に整理して掲載しています。
-      <span class="quirk">※補足情報としてご覧ください</span>
-    </div>
-
-    <section class="grid">
-      <article class="card">
-        <h2>基本情報</h2>
-        <div class="kv">
-          <span>性別：男</span>
-          <span>年齢：35</span>
-          <span>性格：話好き / 基本穏やか / 頑固</span>
+  <main class="page">
+    <header class="topbar reveal">
+      <div class="brand">
+        <div class="brand-mark">P2</div>
+        <div class="brand-copy">
+          <strong>人物紹介 2nd View</strong>
+          <span>Profile Story Page</span>
         </div>
-      </article>
+      </div>
+      <nav class="nav" aria-label="ページ内ナビゲーション">
+        <a href="#profile">Profile</a>
+        <a href="#story">Story</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="#links">Links</a>
+      </nav>
+    </header>
 
-      <article class="card">
-        <h2>価値観</h2>
-        <p>
-          日々の判断で重視しているのは、
-          「人生を楽しく、笑顔で生きること」です。
-        </p>
-        <p class="quote">長く続く努力ほど、明るさを失わない姿勢が重要と考えています。</p>
-      </article>
-
-      <article class="card">
-        <h2>趣味・特技</h2>
-        <div class="hobby-grid">
-          <div class="hobby">写真</div>
-          <div class="hobby">柔道</div>
-          <div class="hobby">漫画</div>
-          <div class="hobby">珈琲（豆から挽いて抽出）</div>
-          <div class="hobby">レアチーズケーキ作り</div>
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <div>
+          <span class="eyebrow">Supplementary Profile</span>
+          <h1>穏やかさと<br><span class="hero-accent">熱量</span>の両立。</h1>
+          <p>
+            仕事でも日常でも、明るく続けることを軸にした人物像を、
+            情報の整理だけで終わらせず、空気感まで伝わる1ページに再構成しました。
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#story">人物像を見る</a>
+            <button type="button" data-scroll="#links">関連ページへ</button>
+          </div>
         </div>
-      </article>
 
-      <article class="card">
-        <h2>柔道について</h2>
-        <p>
-          大学時代には、個人・団体の双方で全国16位の実績があります。
-          現在は、小学生・中学生の頃にお世話になった柔道場にて、
-          中学生への指導を月に数回継続しています。
+        <div class="hero-stats" aria-label="サマリー">
+          <div class="stat">
+            <strong data-count="35">0</strong>
+            <span>年齢</span>
+          </div>
+          <div class="stat">
+            <strong data-count="16">0</strong>
+            <span>全国順位実績</span>
+          </div>
+          <div class="stat">
+            <strong data-count="5">0</strong>
+            <span>主な趣味・特技</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel reveal" id="profile">
+        <div class="status-row">
+          <span class="section-label">Quick Facts</span>
+          <div class="status-badge">
+            <span class="status-dot" aria-hidden="true"></span>
+            補足情報
+          </div>
+        </div>
+
+        <div class="profile-list">
+          <div class="profile-item">
+            <span>性別</span>
+            <strong>男</strong>
+          </div>
+          <div class="profile-item">
+            <span>性格</span>
+            <strong>話好き / 基本穏やか / 頑固</strong>
+          </div>
+          <div class="profile-item">
+            <span>日々の価値観</span>
+            <strong>人生を楽しく、笑顔で生きること</strong>
+          </div>
+          <div class="profile-item">
+            <span>続けていること</span>
+            <strong>柔道指導 / 珈琲 / 手作り菓子</strong>
+          </div>
+        </div>
+
+        <div class="quote-panel">
+          <p>長く続く努力ほど、明るさを失わない姿勢が重要。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="content-grid">
+      <div class="section reveal" id="story">
+        <span class="section-label">Story</span>
+        <h2>数字より先に、<br>人としての輪郭が見える構成。</h2>
+        <p class="section-intro">
+          事実だけを並べるのではなく、判断軸や積み重ね方が伝わるように、
+          人物像を3つの観点で整理しています。
         </p>
-      </article>
 
-      <article class="card">
-        <h2>日常のこだわり</h2>
-        <p>
-          珈琲は豆を挽くところから行い、その日の気分に合わせて抽出を調整します。
-          レアチーズケーキは「自分の好きな味で食べたい」という理由で、配合を調整して手作りしています。
+        <div class="story-grid">
+          <article class="story-card reveal">
+            <strong>Mindset</strong>
+            <h3>楽しく続けることを、継続の設計にしている</h3>
+            <p>
+              明るさは気分ではなく、長期戦で成果を出すための前提条件。
+              無理なく続く工夫を積み上げるタイプです。
+            </p>
+          </article>
+
+          <article class="story-card reveal">
+            <strong>Discipline</strong>
+            <h3>競技経験で鍛えた、静かな粘り強さ</h3>
+            <p>
+              柔道では大学時代に個人・団体の双方で全国16位。
+              派手さよりも、積み重ねを形にする実直さがあります。
+            </p>
+          </article>
+
+          <article class="story-card reveal">
+            <strong>Daily Craft</strong>
+            <h3>日常のこだわりにも、再現性と調整力が出る</h3>
+            <p>
+              珈琲の抽出やレアチーズケーキの配合調整のように、
+              小さな違いを見極めて、自分なりの最適解へ持っていく姿勢があります。
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="section reveal">
+        <span class="section-label">Timeline</span>
+        <h2>経験の流れ</h2>
+        <p class="section-intro">
+          競技の実績で終わらせず、今も継続して次世代へ還元している点を中心に配置しました。
         </p>
-      </article>
 
-      <article class="card">
-        <h2>遷移</h2>
-        <p class="small">制作実績、構成図、1 枚目への導線を以下にまとめています。</p>
-        <p><a class="project-link" href="/books/">制作実績: 読書時間管理ツールを見る</a></p>
-        <p><a class="project-link" href="architecture-diagram.html">GCE 構成図と運用資料を見る</a></p>
-        <p><a href="index.html">index.html に戻る</a></p>
-      </article>
+        <div class="timeline">
+          <article class="timeline-card reveal">
+            <div class="timeline-num">01</div>
+            <div>
+              <h3>学生時代</h3>
+              <p>大学時代に柔道で全国16位。個人・団体の両面で結果を残しています。</p>
+            </div>
+          </article>
+
+          <article class="timeline-card reveal">
+            <div class="timeline-num">02</div>
+            <div>
+              <h3>現在</h3>
+              <p>お世話になった柔道場で、中学生への指導を月に数回継続しています。</p>
+            </div>
+          </article>
+
+          <article class="timeline-card reveal">
+            <div class="timeline-num">03</div>
+            <div>
+              <h3>日常</h3>
+              <p>珈琲を豆から挽き、気分に合わせて抽出を調整。好みの味を自分で作り込む習慣があります。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="hobbies" style="margin-top: 22px;">
+      <span class="section-label">Hobbies & Skills</span>
+      <h2>趣味・特技も、少し動きのある見せ方に。</h2>
+      <p class="section-intro">
+        ホバー時に傾きと奥行きが出るカードにして、読み物だけでなく触って確認できるUIにしています。
+      </p>
+
+      <div class="hobby-grid">
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">📷</span>
+            <span class="chip">Photo</span>
+          </div>
+          <div>
+            <h3>写真</h3>
+            <p>一瞬の空気感や構図の違いを捉える感覚が活きる趣味。</p>
+          </div>
+        </article>
+
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">🥋</span>
+            <span class="chip">Judo</span>
+          </div>
+          <div>
+            <h3>柔道</h3>
+            <p>競技経験だけでなく、今も指導という形で継続しています。</p>
+          </div>
+        </article>
+
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">📚</span>
+            <span class="chip">Manga</span>
+          </div>
+          <div>
+            <h3>漫画</h3>
+            <p>物語のテンポや世界観を楽しみながら、気分転換にも使っています。</p>
+          </div>
+        </article>
+
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">☕</span>
+            <span class="chip">Coffee</span>
+          </div>
+          <div>
+            <h3>珈琲</h3>
+            <p>豆を挽くところから始め、その日の気分で抽出を微調整します。</p>
+          </div>
+        </article>
+
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">🍰</span>
+            <span class="chip">Craft</span>
+          </div>
+          <div>
+            <h3>レアチーズケーキ作り</h3>
+            <p>自分の好きな味で食べたいから、配合を調整して手作りしています。</p>
+          </div>
+        </article>
+
+        <article class="hobby-card reveal" data-tilt>
+          <div class="hobby-top">
+            <span class="emoji" aria-hidden="true">✨</span>
+            <span class="chip">Character</span>
+          </div>
+          <div>
+            <h3>人柄</h3>
+            <p>話しやすさ、穏やかさ、少しの頑固さ。そのバランスが個性です。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="links" style="margin-top: 22px;">
+      <span class="section-label">Links</span>
+      <h2>関連ページへの導線</h2>
+      <p class="section-intro">
+        遷移先も同じトーンで並べ、ページ全体が途中で切れないようにしました。
+      </p>
+
+      <div class="links-panel reveal">
+        <h3>Next Actions</h3>
+        <p>制作実績、構成図、1枚目への導線をまとめています。</p>
+        <div class="link-stack">
+          <a class="link-chip" href="/books/">
+            <span>制作実績: 読書時間管理ツールを見る</span>
+            <small>Open</small>
+          </a>
+          <a class="link-chip" href="architecture-diagram.html">
+            <span>GCE 構成図と運用資料を見る</span>
+            <small>Open</small>
+          </a>
+          <a class="link-chip" href="index.html">
+            <span>index.html に戻る</span>
+            <small>Back</small>
+          </a>
+        </div>
+      </div>
+
+      <p class="footer-note">Interactive profile page / HTML + CSS + Vanilla JavaScript</p>
     </section>
   </main>
+
+  <script>
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.querySelectorAll("[data-scroll]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = document.querySelector(button.dataset.scroll);
+        if (target) {
+          target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        }
+      });
+    });
+
+    const revealElements = document.querySelectorAll(".reveal");
+    if (reduceMotion) {
+      revealElements.forEach((element) => element.classList.add("is-visible"));
+    } else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16 });
+
+      revealElements.forEach((element, index) => {
+        element.style.transitionDelay = `${Math.min(index * 40, 220)}ms`;
+        revealObserver.observe(element);
+      });
+    }
+
+    const counters = document.querySelectorAll("[data-count]");
+    const animateCounter = (element) => {
+      const target = Number(element.dataset.count || 0);
+      const duration = 1200;
+      const startTime = performance.now();
+
+      const tick = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = Math.floor(target * eased);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          element.textContent = String(target);
+        }
+      };
+
+      requestAnimationFrame(tick);
+    };
+
+    if (reduceMotion) {
+      counters.forEach((element) => {
+        element.textContent = element.dataset.count;
+      });
+    } else {
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.8 });
+
+      counters.forEach((element) => counterObserver.observe(element));
+    }
+
+    const glow = document.querySelector(".cursor-glow");
+    if (glow && !reduceMotion) {
+      let glowX = window.innerWidth / 2;
+      let glowY = window.innerHeight / 2;
+      let currentX = glowX;
+      let currentY = glowY;
+
+      window.addEventListener("pointermove", (event) => {
+        glowX = event.clientX;
+        glowY = event.clientY;
+      });
+
+      const moveGlow = () => {
+        currentX += (glowX - currentX) * 0.12;
+        currentY += (glowY - currentY) * 0.12;
+        glow.style.transform = `translate3d(${currentX - 190}px, ${currentY - 190}px, 0)`;
+        requestAnimationFrame(moveGlow);
+      };
+
+      moveGlow();
+    }
+
+    document.querySelectorAll("[data-tilt]").forEach((card) => {
+      if (reduceMotion) {
+        return;
+      }
+
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
+        const rotateY = (px - 0.5) * 10;
+        const rotateX = (0.5 - py) * 10;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+
+      card.addEventListener("pointerleave", () => {
+        card.style.transform = "";
+      });
+    });
+  </script>
 </body>
 </html>
