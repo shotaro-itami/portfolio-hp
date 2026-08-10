@@ -29,6 +29,31 @@ git pull origin main
 
 更新途中に失敗しても既存の `/` と `/page2.html` を残します。
 
+## 本番構成資料の認証
+
+`/architecture-diagram.html` は Nginx の Basic Auth で保護します。
+
+パスワードファイルは Git 管理せず、本番 VM 上にだけ作成します。
+
+```bash
+sudo apt-get update
+sudo apt-get install -y apache2-utils
+sudo install -d -m 750 -o root -g www-data /etc/nginx/auth
+sudo htpasswd -B -c /etc/nginx/auth/portfolio-architecture.htpasswd <username>
+sudo chown root:www-data /etc/nginx/auth/portfolio-architecture.htpasswd
+sudo chmod 640 /etc/nginx/auth/portfolio-architecture.htpasswd
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+ユーザーを追加する場合は `-c` を外します。
+
+```bash
+sudo htpasswd -B /etc/nginx/auth/portfolio-architecture.htpasswd <username>
+```
+
+Nginx 設定を変更した場合は、使用中の本番 Nginx 設定へ `deploy/nginx/itamishotaro.com.conf` の内容を反映してから `nginx -t` と reload を行います。`deploy/release.sh` は HTML の release 切替だけを行い、Nginx 設定やパスワードファイルは作成しません。
+
 ## Rollback
 
 ```bash
