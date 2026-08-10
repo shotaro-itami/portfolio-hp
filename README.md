@@ -27,6 +27,7 @@
 - AI活用方針
 - 自己PR
 - 人物紹介の補足情報
+- GCE 構成図と運用資料（Basic Auth 保護）
 
 ## 補足
 
@@ -47,7 +48,7 @@
 - 補助ドメイン: `www.itamishotaro.com`
 - TLS: Cloudflare Origin Certificate
 
-公開時は Git 管理ディレクトリから release を作り、公開 symlink だけ切り替えます。
+main にマージ済みの変更を公開する場合は、Git 管理ディレクトリから release を作り、公開 symlink だけ切り替えます。
 
 ```bash
 cd /home/itamishotaro/portfolio-hp

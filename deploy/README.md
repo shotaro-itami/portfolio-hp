@@ -19,6 +19,15 @@ git pull origin main
 ./deploy/release.sh
 ```
 
+未マージの作業ブランチを本番 VM で一時確認する場合は、対象ブランチへ切り替えてから release を作ります。
+
+```bash
+git fetch origin
+git switch <branch-name>
+git pull --ff-only
+./deploy/release.sh
+```
+
 `deploy/release.sh` は以下だけを行います。
 
 1. release ディレクトリ作成
@@ -27,7 +36,7 @@ git pull origin main
 4. `nginx -t`
 5. `systemctl reload nginx`
 
-更新途中に失敗しても既存の `/` と `/page2.html` を残します。
+更新途中に失敗しても既存の `/`、`/page2.html`、`/architecture-diagram.html` を残します。
 
 ## 本番構成資料の認証
 

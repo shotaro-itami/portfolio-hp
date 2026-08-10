@@ -445,7 +445,7 @@
             <span class="mono">/var/www/html/architecture-diagram.html</span>
           </li>
           <li>構成資料: <span class="mono">Basic Auth</span> で保護</li>
-          <li>最新 release: <span class="mono">20260411000949</span></li>
+          <li>記録 release: <span class="mono">20260411000949</span></li>
         </ul>
       </div>
       <div class="card panel-pink">
@@ -456,7 +456,7 @@
           <li>backend current: <span class="mono">/opt/reading-time-tracker/current</span></li>
           <li>backend releases: <span class="mono">/opt/reading-time-tracker/releases</span></li>
           <li>frontend public: <span class="mono">/var/www/html/books</span></li>
-          <li>最新 release: <span class="mono">20260411003055</span></li>
+          <li>記録 release: <span class="mono">20260411003055</span></li>
         </ul>
       </div>
     </div>
@@ -506,8 +506,8 @@
 
         <rect class="flow-box" x="868" y="54" width="264" height="96" rx="18" ry="18"></rect>
         <text class="flow-text" x="1000" y="90" text-anchor="middle">portfolio-hp</text>
-        <text class="flow-sub" x="1000" y="114" text-anchor="middle">/ , /page2.html</text>
-        <text class="flow-sub" x="1000" y="136" text-anchor="middle">/var/www/html/*.html</text>
+        <text class="flow-sub" x="1000" y="114" text-anchor="middle">/ , /page2, /arch</text>
+        <text class="flow-sub" x="1000" y="136" text-anchor="middle">static + protected docs</text>
 
         <rect class="flow-box" x="868" y="212" width="264" height="96" rx="18" ry="18"></rect>
         <text class="flow-text" x="1000" y="248" text-anchor="middle">SPA Frontend</text>
@@ -544,7 +544,7 @@
       </div>
       <div class="card panel-mint">
         <div class="label">FRONTEND</div>
-        <p class="small"><span class="mono">/</span> と <span class="mono">/page2.html</span> は静的 HTML、<span class="mono">/books/</span> は SPA を返す。</p>
+        <p class="small"><span class="mono">/</span> と <span class="mono">/page2.html</span> は静的 HTML、<span class="mono">/architecture-diagram.html</span> は認証後に返す。</p>
       </div>
       <div class="card panel-gold">
         <div class="label">BACKEND</div>
@@ -567,7 +567,7 @@
       <div class="card panel-mint">
         <div class="label">CURRENT</div>
         <h3>公開中コード</h3>
-        <p class="small"><span class="mono">/opt/reading-time-tracker/current</span><br>portfolio は `index.html` と `page2.html` の symlink で公開。</p>
+        <p class="small"><span class="mono">/opt/reading-time-tracker/current</span><br>portfolio は 3 つの HTML symlink で公開。</p>
       </div>
       <div class="card panel-gold">
         <div class="label">DATA</div>
@@ -589,6 +589,7 @@ env       -> /etc/reading-time-tracker/reading-time-tracker.env
 backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db
 
 portfolio-hp:
+public   -> /var/www/html/index.html, /var/www/html/page2.html, /var/www/html/architecture-diagram.html
 nginx    -> /etc/nginx/sites-enabled/itamishotaro.com -> /etc/nginx/sites-available/itamishotaro.com
 auth     -> /etc/nginx/auth/portfolio-architecture.htpasswd</pre>
     <div class="footer">3 / 9</div>
@@ -689,11 +690,11 @@ curl -I https://itamishotaro.com/books/api/health</pre>
       <div class="card panel-blue">
         <div class="label">DEPLOY</div>
         <pre>portfolio-hp:
-git pull
+git pull --ff-only
 ./deploy/release.sh
 
 reading-time-tracker:
-git pull
+git pull --ff-only
 ./deploy/release.sh</pre>
       </div>
       <div class="card panel-mint">
@@ -715,7 +716,9 @@ ln -sfnT previous /opt/reading-time-tracker/current
 systemctl restart reading-time-tracker
 
 portfolio:
-ln -sfnT previous/index.html /var/www/html/index.html</pre>
+ln -sfnT previous/index.html /var/www/html/index.html
+ln -sfnT previous/page2.html /var/www/html/page2.html
+ln -sfnT previous/architecture-diagram.html /var/www/html/architecture-diagram.html</pre>
       </div>
       <div class="card panel-pink">
         <div class="label">RESTORE</div>
@@ -743,7 +746,7 @@ curl /books/api/health</pre>
           <li>方式: <span class="mono">sqlite3 .backup</span></li>
           <li>保持: 14 日</li>
           <li>前提: VM に <span class="mono">sqlite3</span> パッケージが必要</li>
-          <li>直近成功: <span class="mono">2026-04-11 00:45:29 JST</span></li>
+          <li>記録成功: <span class="mono">2026-04-11 00:45:29 JST</span></li>
         </ul>
       </div>
       <div class="card panel-mint">
@@ -758,7 +761,7 @@ curl /books/api/health</pre>
             <span class="mono">/books/api/health</span>
           </li>
           <li><span class="mono">/var/www/html/books</span> symlink も検証</li>
-          <li>直近成功: <span class="mono">2026-04-11 00:40:10 JST</span></li>
+          <li>記録成功: <span class="mono">2026-04-11 00:40:10 JST</span></li>
         </ul>
       </div>
     </div>
@@ -772,7 +775,7 @@ sudo journalctl -u reading-time-tracker-healthcheck.service -n 50 --no-pager</pr
   <section class="slide">
     <div class="badge">SLIDE 8</div>
     <h1>正常系の確認ポイント</h1>
-    <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 5 本、service 1 本、symlink 4 本、backup 1 本、Nginx の有効設定を見れば十分です。</p>
+    <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 5 本、service 1 本、symlink 5 本、backup 1 本、Nginx の有効設定を見れば十分です。</p>
     <div class="grid-2">
       <div class="card panel-blue">
         <div class="label">HTTP</div>
@@ -789,6 +792,7 @@ readlink -f /opt/reading-time-tracker/current
 readlink -f /var/www/html/books
 readlink -f /var/www/html/index.html
 readlink -f /var/www/html/page2.html
+readlink -f /var/www/html/architecture-diagram.html
 ls -1 /var/backups/reading-time-tracker
 sudo nginx -T 2>/dev/null | grep -n -A6 -B3 'architecture-diagram'</pre>
       </div>
@@ -831,11 +835,12 @@ sudo nginx -T 2>/dev/null | grep -n -A6 -B3 'architecture-diagram'</pre>
         </ul>
       </div>
     </div>
-    <pre>現行の実測値:
+    <pre>記録済みの実測値（更新時は再確認）:
 backend current -> /opt/reading-time-tracker/releases/20260411003055
 frontend books  -> /var/www/releases/reading-time-tracker/20260411003055
 portfolio index -> /var/www/releases/portfolio-hp/20260411000949/index.html
 portfolio page2 -> /var/www/releases/portfolio-hp/20260411000949/page2.html
+portfolio arch  -> /var/www/releases/portfolio-hp/20260411000949/architecture-diagram.html
 nginx site      -> /etc/nginx/sites-enabled/itamishotaro.com
 architecture   -> Basic Auth, expect 401 before login
 backup file     -> /var/backups/reading-time-tracker/books-20260411004529.db</pre>
