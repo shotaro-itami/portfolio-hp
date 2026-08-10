@@ -7,20 +7,18 @@
   <meta name="description" content="IT業界4年目。金融NW運用保守2年6か月／通信会社監視運用9か月（Perl監視conf統合・Zabbix登録・AI支援改修）。" />
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #10110f;
-      --bg-2: #151713;
-      --panel: rgba(255, 255, 255, 0.055);
-      --panel-strong: rgba(255, 255, 255, 0.09);
-      --line: rgba(255, 255, 255, 0.13);
-      --line-strong: rgba(255, 255, 255, 0.24);
-      --text: #f7f3ea;
-      --muted: #beb8ab;
-      --soft: #e5dccb;
-      --accent: #f4b665;
-      --accent-2: #63d8c6;
-      --accent-3: #e36f7c;
-      --max: 1180px;
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --paper: #ffffff;
+      --paper-2: #f0f3ef;
+      --ink: #1f2528;
+      --muted: #656f72;
+      --line: #d8ded9;
+      --line-strong: #a9b4ae;
+      --green: #2f6d5f;
+      --blue: #315f8d;
+      --red: #ad3f4a;
+      --max: 1080px;
     }
 
     * { box-sizing: border-box; }
@@ -30,12 +28,10 @@
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--text);
+      color: var(--ink);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
       line-height: 1.72;
-      background:
-        linear-gradient(135deg, rgba(244, 182, 101, 0.12) 0 12%, transparent 12% 44%, rgba(99, 216, 198, 0.08) 44% 58%, transparent 58%),
-        linear-gradient(180deg, #10110f 0%, #171914 48%, #10110f 100%);
+      background: var(--bg);
       overflow-x: hidden;
     }
 
@@ -44,101 +40,53 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-      background-size: 36px 36px;
-      opacity: 0.35;
+      display: none;
     }
 
     .wrap {
       position: relative;
       width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
-      padding: 24px 0 80px;
+      padding: 22px 0 72px;
       z-index: 1;
-    }
-
-    header,
-    .card,
-    .meta div,
-    .pill,
-    code,
-    footer {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, var(--panel-strong), var(--panel));
-      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
-      backdrop-filter: blur(16px);
     }
 
     header {
       position: relative;
-      min-height: 520px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr);
-      gap: 22px;
-      align-items: end;
-      padding: 48px;
+      display: block;
+      padding: 34px 0 26px;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--line);
       border-radius: 8px;
-      overflow: hidden;
+      overflow: visible;
     }
 
     header::before {
-      content: "SI";
-      position: absolute;
-      right: 48px;
-      top: 48px;
-      width: 300px;
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      color: rgba(247, 243, 234, 0.92);
-      font-size: 8rem;
-      font-weight: 900;
-      letter-spacing: 0;
-      background:
-        linear-gradient(135deg, rgba(244, 182, 101, 0.28), transparent 52%),
-        linear-gradient(315deg, rgba(99, 216, 198, 0.22), transparent 48%),
-        rgba(255, 255, 255, 0.045);
+      content: "";
+      display: block;
+      width: 86px;
+      height: 5px;
+      margin-bottom: 26px;
+      border-radius: 0;
+      background: linear-gradient(90deg, var(--green) 0 35%, var(--blue) 35% 68%, var(--red) 68%);
     }
 
     header::after {
-      content: "Operations / Monitoring / AI Assisted Craft";
-      position: absolute;
-      left: 48px;
-      top: 34px;
-      color: var(--accent-2);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0;
-      text-transform: uppercase;
-    }
-
-    header > h1,
-    header > .muted,
-    header > div:not(.meta):not(.toc) {
-      grid-column: 1;
-    }
-
-    header > .meta,
-    header > .toc {
-      grid-column: 1 / -1;
+      content: none;
     }
 
     h1 {
-      max-width: 760px;
-      margin: 70px 0 10px;
-      font-size: 5.7rem;
-      line-height: 0.94;
+      max-width: 860px;
+      margin: 0 0 14px;
+      font-size: 2.7rem;
+      line-height: 1.14;
       letter-spacing: 0;
     }
 
     h2 {
       margin: 0 0 14px;
-      font-size: 2.35rem;
-      line-height: 1.05;
+      font-size: 1.45rem;
+      line-height: 1.28;
       letter-spacing: 0;
     }
 
@@ -153,23 +101,25 @@
     }
 
     header > .muted {
-      max-width: 64ch;
-      font-size: 1.04rem;
+      max-width: 74ch;
+      font-size: 1rem;
     }
 
-    strong { color: var(--soft); }
+    strong { color: var(--ink); }
 
     .meta {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-top: 24px;
     }
 
     .meta div {
-      min-height: 104px;
-      padding: 15px;
-      border-radius: 8px;
+      min-height: 86px;
+      padding: 14px 15px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
       color: var(--muted);
     }
 
@@ -179,14 +129,20 @@
       min-height: 34px;
       padding: 6px 11px;
       margin: 8px 7px 0 0;
-      border-radius: 6px;
-      color: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+      color: var(--ink);
       font-size: 0.9rem;
       box-shadow: none;
     }
 
-    .pill:nth-of-type(2n) { color: #c8fbf3; }
-    .pill:nth-of-type(3n) { color: #ffd8de; }
+    .pill:nth-of-type(2n) { border-color: rgba(49, 95, 141, 0.32); }
+    .pill:nth-of-type(3n) { border-color: rgba(47, 109, 95, 0.32); }
+
+    .skill-pills {
+      margin-top: 10px;
+    }
 
     .toc {
       position: sticky;
@@ -198,9 +154,8 @@
       margin-top: 18px;
       padding: 10px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(16, 17, 15, 0.78);
-      backdrop-filter: blur(16px);
+      border-radius: 6px;
+      background: rgba(247, 247, 244, 0.95);
     }
 
     .toc a,
@@ -221,32 +176,33 @@
     }
 
     .toc a:hover {
-      color: var(--text);
+      color: var(--ink);
       border-color: var(--line-strong);
-      background: rgba(255, 255, 255, 0.07);
+      background: var(--paper);
       transform: translateY(-1px);
     }
 
     .card {
-      margin: 16px 0;
-      padding: 28px;
-      border-radius: 8px;
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
     }
 
     main > section.card:nth-of-type(1) {
       display: grid;
-      grid-template-columns: 0.72fr 1.28fr;
-      gap: 22px;
+      grid-template-columns: 0.35fr 1fr;
+      gap: 24px;
       align-items: start;
     }
 
     main > section.card:nth-of-type(1)::before {
-      content: "SUMMARY";
-      color: var(--accent);
-      font-size: 4.4rem;
-      font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: 0;
+      content: "01";
+      color: var(--green);
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
     }
 
     #skills {
@@ -261,7 +217,7 @@
 
     #skills h3 {
       margin-top: 0;
-      color: var(--accent-2);
+      color: var(--green);
     }
 
     #skills ul {
@@ -269,8 +225,8 @@
       margin: 0;
       padding: 16px 16px 16px 34px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.14);
+      border-radius: 6px;
+      background: var(--paper-2);
     }
 
     ul {
@@ -290,22 +246,20 @@
 
     #experience > .grid > .card {
       margin: 0;
-      background:
-        linear-gradient(135deg, rgba(99, 216, 198, 0.11), transparent 44%),
-        linear-gradient(180deg, var(--panel-strong), var(--panel));
+      background: var(--paper);
+      border-top: 4px solid var(--green);
     }
 
     #experience > .grid > .card:nth-child(2) {
-      background:
-        linear-gradient(135deg, rgba(227, 111, 124, 0.13), transparent 44%),
-        linear-gradient(180deg, var(--panel-strong), var(--panel));
+      background: var(--paper);
+      border-top-color: var(--blue);
     }
 
     code {
       padding: 2px 7px;
       border-radius: 6px;
-      color: #c8fbf3;
-      background: rgba(99, 216, 198, 0.08);
+      color: var(--green);
+      background: var(--paper-2);
       box-shadow: none;
     }
 
@@ -327,13 +281,15 @@
       gap: 14px;
       margin-top: 18px;
       padding: 16px 18px;
-      border-radius: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
       color: var(--muted);
       font-size: 0.9rem;
     }
 
     footer a {
-      color: var(--accent);
+      color: var(--green);
     }
 
     @media (max-width: 960px) {
@@ -344,18 +300,8 @@
         grid-template-columns: 1fr;
       }
 
-      header::before {
-        position: relative;
-        inset: auto;
-        grid-column: 1;
-        width: 220px;
-        justify-self: start;
-        margin-top: 36px;
-        font-size: 5.4rem;
-      }
-
       h1 {
-        font-size: 4.2rem;
+        font-size: 2.3rem;
       }
 
       h2 {
@@ -380,19 +326,11 @@
       }
 
       header {
-        min-height: auto;
-        padding: 22px;
-      }
-
-      header::after {
-        position: static;
-        grid-column: 1;
-        margin-bottom: 8px;
+        padding: 24px 0 20px;
       }
 
       h1 {
-        margin-top: 6px;
-        font-size: 3rem;
+        font-size: 2rem;
       }
 
       h2 {
@@ -400,7 +338,7 @@
       }
 
       main > section.card:nth-of-type(1)::before {
-        font-size: 2.4rem;
+        font-size: 0.9rem;
       }
 
       .meta div,
@@ -430,14 +368,14 @@
         <div><strong>Mail</strong>：itamishotaro@gmail.com</div>
       </div>
 
-      <div style="margin-top:10px">
+      <div class="skill-pills">
         <span class="pill">Perl（主）</span>        <span class="pill">Zabbix</span>
         <span class="pill">Linux（運用）</span>
         <span class="pill">Cisco / Juniper / F5</span>
         <span class="pill">GCE + Nginx</span>
       </div>
 
-      <div class="toc" style="margin-top:14px">
+      <div class="toc">
         <a href="#summary">職務要約</a>
         <a href="#skills">スキル</a>
         <a href="#experience">職務経歴</a>

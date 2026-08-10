@@ -6,22 +6,20 @@
   <title>人物紹介 | 2枚目ページ</title>
   <style>
     :root {
-      --bg: #10110f;
-      --bg-soft: #171914;
-      --panel: rgba(255, 255, 255, 0.055);
-      --panel-strong: rgba(255, 255, 255, 0.09);
-      --line: rgba(255, 255, 255, 0.13);
-      --line-strong: rgba(255, 255, 255, 0.25);
-      --text: #f7f3ea;
-      --muted: #beb8ab;
-      --accent: #f4b665;
-      --accent-2: #63d8c6;
-      --accent-3: #e36f7c;
-      --glow: rgba(244, 182, 101, 0.16);
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
-      --radius: 8px;
-      --radius-sm: 8px;
-      --max: 1180px;
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --paper: #ffffff;
+      --paper-2: #f0f3ef;
+      --line: #d8ded9;
+      --line-strong: #a9b4ae;
+      --text: #1f2528;
+      --muted: #656f72;
+      --green: #2f6d5f;
+      --blue: #315f8d;
+      --red: #ad3f4a;
+      --radius: 6px;
+      --radius-sm: 5px;
+      --max: 1080px;
     }
 
     * {
@@ -36,11 +34,9 @@
       margin: 0;
       min-height: 100vh;
       color: var(--text);
-      font-family: "Inter", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
       line-height: 1.7;
-      background:
-        linear-gradient(135deg, rgba(244, 182, 101, 0.12) 0 12%, transparent 12% 45%, rgba(99, 216, 198, 0.08) 45% 58%, transparent 58%),
-        linear-gradient(180deg, #10110f 0%, #171914 52%, #10110f 100%);
+      background: var(--bg);
       overflow-x: hidden;
     }
 
@@ -49,12 +45,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
-      opacity: 0.45;
+      display: none;
     }
 
     .page {
@@ -62,7 +53,7 @@
       z-index: 1;
       max-width: var(--max);
       margin: 0 auto;
-      padding: 28px 20px 96px;
+      padding: 22px 20px 72px;
     }
 
     .topbar {
@@ -76,10 +67,8 @@
       z-index: 5;
       padding: 12px 16px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(16, 17, 15, 0.78);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      background: rgba(247, 247, 244, 0.95);
     }
 
     .brand {
@@ -94,11 +83,12 @@
       height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
+      border-radius: var(--radius);
       font-weight: 800;
       letter-spacing: 0;
-      background: linear-gradient(135deg, rgba(244, 182, 101, 0.28), rgba(99, 216, 198, 0.18));
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--paper);
+      border: 1px solid var(--line-strong);
+      color: var(--green);
     }
 
     .brand-copy strong,
@@ -115,7 +105,6 @@
       font-size: 0.75rem;
       color: var(--muted);
       letter-spacing: 0;
-      text-transform: uppercase;
     }
 
     .nav {
@@ -131,13 +120,13 @@
     .primary-link {
       appearance: none;
       border: 1px solid var(--line);
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-sm);
+      background: var(--paper);
       color: var(--text);
       padding: 10px 14px;
       font: inherit;
       text-decoration: none;
-      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+      transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
       cursor: pointer;
     }
 
@@ -145,15 +134,14 @@
     .nav button:hover,
     .link-chip:hover,
     .primary-link:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.26);
-      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--line-strong);
+      background: var(--paper-2);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.25fr 0.95fr;
-      gap: 22px;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 14px;
       align-items: stretch;
       margin-bottom: 22px;
     }
@@ -169,14 +157,12 @@
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
+      background: var(--paper);
     }
 
     .hero-copy {
-      padding: 34px;
-      min-height: 420px;
+      padding: 32px;
+      min-height: 360px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -189,7 +175,6 @@
       gap: 8px;
       font-size: 0.75rem;
       letter-spacing: 0;
-      text-transform: uppercase;
       color: var(--muted);
     }
 
@@ -198,25 +183,25 @@
       content: "";
       width: 28px;
       height: 1px;
-      background: linear-gradient(90deg, var(--accent), transparent);
+      background: var(--green);
     }
 
     h1 {
       margin: 14px 0 14px;
-      font-size: 5rem;
-      line-height: 0.96;
+      font-size: 2.6rem;
+      line-height: 1.14;
       letter-spacing: 0;
     }
 
     .hero-copy p {
       max-width: 52ch;
       margin: 0;
-      font-size: 1.04rem;
-      color: #d6deea;
+      font-size: 1rem;
+      color: var(--muted);
     }
 
     .hero-accent {
-      color: #ffd7a9;
+      color: var(--green);
     }
 
     .hero-actions {
@@ -227,8 +212,9 @@
     }
 
     .primary-link {
-      background: linear-gradient(135deg, rgba(240, 138, 36, 0.22), rgba(240, 138, 36, 0.08));
-      border-color: rgba(240, 138, 36, 0.36);
+      background: var(--green);
+      border-color: var(--green);
+      color: #ffffff;
     }
 
     .hero-stats {
@@ -240,15 +226,15 @@
 
     .stat {
       padding: 14px 14px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper-2);
     }
 
     .stat strong {
       display: block;
       margin-bottom: 4px;
-      font-size: 2rem;
+      font-size: 1.65rem;
       line-height: 1;
     }
 
@@ -262,25 +248,7 @@
       display: grid;
       grid-template-rows: auto auto 1fr;
       gap: 14px;
-      background: linear-gradient(180deg, rgba(31, 32, 27, 0.92), rgba(16, 17, 15, 0.82));
-    }
-
-    .hero-panel::before,
-    .section::before,
-    .story-card::before,
-    .timeline-card::before,
-    .hobby-card::before,
-    .links-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      width: auto;
-      height: auto;
-      border-radius: 0;
-      background: linear-gradient(135deg, transparent 0 72%, var(--glow) 72% 73%, transparent 73%);
-      filter: none;
-      opacity: 0.75;
-      pointer-events: none;
+      background: var(--paper);
     }
 
     .status-row {
@@ -295,10 +263,10 @@
       align-items: center;
       gap: 8px;
       padding: 7px 11px;
-      border: 1px solid rgba(79, 209, 197, 0.22);
-      border-radius: 6px;
-      color: #cafaf2;
-      background: rgba(79, 209, 197, 0.08);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--green);
+      background: var(--paper-2);
       font-size: 0.84rem;
     }
 
@@ -306,9 +274,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--accent-2);
-      box-shadow: 0 0 0 8px rgba(79, 209, 197, 0.12);
-      animation: pulse 1.9s infinite;
+      background: var(--green);
     }
 
     .profile-list {
@@ -322,7 +288,7 @@
       justify-content: space-between;
       gap: 16px;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--line);
     }
 
     .profile-item:last-child {
@@ -342,21 +308,21 @@
     .quote-panel {
       margin-top: auto;
       padding: 18px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      background: var(--paper-2);
+      border: 1px solid var(--line);
     }
 
     .quote-panel p {
       margin: 0;
       font-size: 1.05rem;
-      color: #f5f7fa;
+      color: var(--text);
     }
 
     .content-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 22px;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 14px;
       margin-top: 22px;
     }
 
@@ -364,10 +330,14 @@
       padding: 28px;
     }
 
+    .standalone-section {
+      margin-top: 22px;
+    }
+
     .section h2 {
       margin: 10px 0 10px;
-      font-size: 2.25rem;
-      line-height: 1.05;
+      font-size: 1.55rem;
+      line-height: 1.28;
       letter-spacing: 0;
     }
 
@@ -389,7 +359,7 @@
     .hobby-card,
     .links-panel {
       padding: 22px;
-      background: rgba(9, 14, 21, 0.72);
+      background: var(--paper);
     }
 
     .story-card h3,
@@ -406,16 +376,15 @@
     .hobby-card p,
     .links-panel p {
       margin: 0;
-      color: #d6deea;
+      color: var(--muted);
     }
 
     .story-card strong {
       display: inline-block;
       margin-bottom: 10px;
-      color: #ffd7a9;
+      color: var(--green);
       font-size: 0.84rem;
       letter-spacing: 0;
-      text-transform: uppercase;
     }
 
     .timeline-card {
@@ -430,10 +399,10 @@
       height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
-      color: #ffd7a9;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      color: var(--green);
       font-weight: 800;
     }
 
@@ -446,13 +415,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
-      transform-style: preserve-3d;
+      transition: border-color 160ms ease, background 160ms ease;
     }
 
     .hobby-card:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-      background: rgba(17, 25, 38, 0.92);
+      border-color: var(--line-strong);
+      background: var(--paper-2);
     }
 
     .hobby-top {
@@ -463,19 +431,14 @@
       margin-bottom: 18px;
     }
 
-    .emoji {
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-
     .chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      background: var(--paper-2);
+      border: 1px solid var(--line);
       color: var(--muted);
       font-size: 0.8rem;
     }
@@ -503,14 +466,14 @@
     }
 
     .reveal {
-      opacity: 0;
-      transform: translateY(28px) scale(0.985);
-      transition: opacity 700ms ease, transform 700ms ease;
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
 
     .reveal.is-visible {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: none;
     }
 
     .footer-note {
@@ -532,11 +495,6 @@
       border: 0;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(0.9); opacity: 0.72; }
-    }
-
     @media (max-width: 1080px) {
       .hero,
       .content-grid {
@@ -552,7 +510,7 @@
 
       .topbar {
         position: static;
-        border-radius: 8px;
+        border-radius: var(--radius);
         padding: 14px;
       }
 
@@ -567,7 +525,7 @@
       .timeline-card,
       .hobby-card,
       .links-panel {
-        border-radius: 8px;
+        border-radius: var(--radius);
       }
 
       .hero-copy {
@@ -576,7 +534,7 @@
       }
 
       h1 {
-        font-size: 3.1rem;
+        font-size: 2.1rem;
       }
 
       .section h2 {
@@ -617,46 +575,46 @@
   <main class="page">
     <header class="topbar reveal">
       <div class="brand">
-        <div class="brand-mark">P2</div>
+        <div class="brand-mark">補</div>
         <div class="brand-copy">
-          <strong>人物紹介 2nd View</strong>
-          <span>Profile Story Page</span>
+          <strong>人物紹介</strong>
+          <span>職務経歴の補足</span>
         </div>
       </div>
       <nav class="nav" aria-label="ページ内ナビゲーション">
-        <a href="#profile">Profile</a>
-        <a href="#story">Story</a>
-        <a href="#hobbies">Hobbies</a>
-        <a href="#links">Links</a>
+        <a href="#profile">基本情報</a>
+        <a href="#story">人柄</a>
+        <a href="#hobbies">趣味</a>
+        <a href="#links">リンク</a>
       </nav>
     </header>
 
     <section class="hero">
       <div class="hero-copy reveal">
         <div>
-          <span class="eyebrow">Supplementary Profile</span>
-          <h1>穏やかさと<br><span class="hero-accent">熱量</span>の両立。</h1>
+          <span class="eyebrow">職務経歴だけでは伝わりにくい部分</span>
+          <h1>人柄と、続けていること。</h1>
           <p>
-            仕事でも日常でも、明るく続けることを軸にした人物像を、
-            情報の整理だけで終わらせず、空気感まで伝わる1ページに再構成しました。
+            技術や業務経験の手前にある、普段の考え方や好きなものをまとめています。
+            仕事では見えにくい部分まで、少しだけ伝わるページです。
           </p>
           <div class="hero-actions">
-            <a class="primary-link" href="#story">人物像を見る</a>
-            <button type="button" data-scroll="#links">関連ページへ</button>
+            <a class="primary-link" href="#story">人柄を見る</a>
+            <button type="button" data-scroll="#links">関連ページ</button>
           </div>
         </div>
 
         <div class="hero-stats" aria-label="サマリー">
           <div class="stat">
-            <strong data-count="35">0</strong>
+            <strong>35</strong>
             <span>年齢</span>
           </div>
           <div class="stat">
-            <strong data-count="16">0</strong>
+            <strong>16</strong>
             <span>全国順位実績</span>
           </div>
           <div class="stat">
-            <strong data-count="5">0</strong>
+            <strong>5</strong>
             <span>主な趣味・特技</span>
           </div>
         </div>
@@ -664,7 +622,7 @@
 
       <aside class="hero-panel reveal" id="profile">
         <div class="status-row">
-          <span class="section-label">Quick Facts</span>
+          <span class="section-label">基本情報</span>
           <div class="status-badge">
             <span class="status-dot" aria-hidden="true"></span>
             補足情報
@@ -698,16 +656,16 @@
 
     <section class="content-grid">
       <div class="section reveal" id="story">
-        <span class="section-label">Story</span>
-        <h2>数字より先に、<br>人としての輪郭が見える構成。</h2>
+        <span class="section-label">人柄</span>
+        <h2>落ち着いて続けるタイプです。</h2>
         <p class="section-intro">
-          事実だけを並べるのではなく、判断軸や積み重ね方が伝わるように、
-          人物像を3つの観点で整理しています。
+          目立つことより、決めたことを続けることを大切にしています。
+          明るく話しながらも、必要なところでは粘り強く向き合います。
         </p>
 
         <div class="story-grid">
           <article class="story-card reveal">
-            <strong>Mindset</strong>
+            <strong>考え方</strong>
             <h3>楽しく続けることを、継続の設計にしている</h3>
             <p>
               明るさは気分ではなく、長期戦で成果を出すための前提条件。
@@ -716,7 +674,7 @@
           </article>
 
           <article class="story-card reveal">
-            <strong>Discipline</strong>
+            <strong>積み重ね</strong>
             <h3>競技経験で鍛えた、静かな粘り強さ</h3>
             <p>
               柔道では大学時代に個人・団体の双方で全国16位。
@@ -725,7 +683,7 @@
           </article>
 
           <article class="story-card reveal">
-            <strong>Daily Craft</strong>
+            <strong>日常</strong>
             <h3>日常のこだわりにも、再現性と調整力が出る</h3>
             <p>
               珈琲の抽出やレアチーズケーキの配合調整のように、
@@ -736,7 +694,7 @@
       </div>
 
       <div class="section reveal">
-        <span class="section-label">Timeline</span>
+        <span class="section-label">歩み</span>
         <h2>経験の流れ</h2>
         <p class="section-intro">
           競技の実績で終わらせず、今も継続して次世代へ還元している点を中心に配置しました。
@@ -770,18 +728,18 @@
       </div>
     </section>
 
-    <section class="section reveal" id="hobbies" style="margin-top: 22px;">
-      <span class="section-label">Hobbies & Skills</span>
-      <h2>趣味・特技も、少し動きのある見せ方に。</h2>
+    <section class="section reveal standalone-section" id="hobbies">
+      <span class="section-label">趣味・特技</span>
+      <h2>好きなものにも、その人らしさが出る。</h2>
       <p class="section-intro">
-        ホバー時に傾きと奥行きが出るカードにして、読み物だけでなく触って確認できるUIにしています。
+        写真、柔道、漫画、珈琲、手作り菓子。どれも派手ではありませんが、
+        長く楽しみながら続いているものです。
       </p>
 
       <div class="hobby-grid">
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">📷</span>
-            <span class="chip">Photo</span>
+            <span class="chip">写真</span>
           </div>
           <div>
             <h3>写真</h3>
@@ -789,10 +747,9 @@
           </div>
         </article>
 
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">🥋</span>
-            <span class="chip">Judo</span>
+            <span class="chip">柔道</span>
           </div>
           <div>
             <h3>柔道</h3>
@@ -800,10 +757,9 @@
           </div>
         </article>
 
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">📚</span>
-            <span class="chip">Manga</span>
+            <span class="chip">漫画</span>
           </div>
           <div>
             <h3>漫画</h3>
@@ -811,10 +767,9 @@
           </div>
         </article>
 
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">☕</span>
-            <span class="chip">Coffee</span>
+            <span class="chip">珈琲</span>
           </div>
           <div>
             <h3>珈琲</h3>
@@ -822,10 +777,9 @@
           </div>
         </article>
 
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">🍰</span>
-            <span class="chip">Craft</span>
+            <span class="chip">手作り</span>
           </div>
           <div>
             <h3>レアチーズケーキ作り</h3>
@@ -833,10 +787,9 @@
           </div>
         </article>
 
-        <article class="hobby-card reveal" data-tilt>
+        <article class="hobby-card reveal">
           <div class="hobby-top">
-            <span class="emoji" aria-hidden="true">✨</span>
-            <span class="chip">Character</span>
+            <span class="chip">人柄</span>
           </div>
           <div>
             <h3>人柄</h3>
@@ -846,16 +799,16 @@
       </div>
     </section>
 
-    <section class="section reveal" id="links" style="margin-top: 22px;">
-      <span class="section-label">Links</span>
+    <section class="section reveal standalone-section" id="links">
+      <span class="section-label">リンク</span>
       <h2>関連ページへの導線</h2>
       <p class="section-intro">
-        遷移先も同じトーンで並べ、ページ全体が途中で切れないようにしました。
+        職務経歴、制作実績、構成資料へ移動できます。
       </p>
 
       <div class="links-panel reveal">
-        <h3>Next Actions</h3>
-        <p>制作実績、構成図、1枚目への導線をまとめています。</p>
+        <h3>次に見るページ</h3>
+        <p>必要な情報へすぐ移動できるようにまとめています。</p>
         <div class="link-stack">
           <a class="link-chip" href="/books/">
             <span>制作実績: 読書時間管理ツールを見る</span>
@@ -872,7 +825,7 @@
         </div>
       </div>
 
-      <p class="footer-note">Interactive profile page / HTML + CSS + Vanilla JavaScript</p>
+      <p class="footer-note">公開できる範囲の補足プロフィールです。</p>
     </section>
   </main>
 
@@ -885,81 +838,6 @@
         if (target) {
           target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
         }
-      });
-    });
-
-    const revealElements = document.querySelectorAll(".reveal");
-    if (reduceMotion) {
-      revealElements.forEach((element) => element.classList.add("is-visible"));
-    } else {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.16 });
-
-      revealElements.forEach((element, index) => {
-        element.style.transitionDelay = `${Math.min(index * 40, 220)}ms`;
-        revealObserver.observe(element);
-      });
-    }
-
-    const counters = document.querySelectorAll("[data-count]");
-    const animateCounter = (element) => {
-      const target = Number(element.dataset.count || 0);
-      const duration = 1200;
-      const startTime = performance.now();
-
-      const tick = (now) => {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        element.textContent = Math.floor(target * eased);
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        } else {
-          element.textContent = String(target);
-        }
-      };
-
-      requestAnimationFrame(tick);
-    };
-
-    if (reduceMotion) {
-      counters.forEach((element) => {
-        element.textContent = element.dataset.count;
-      });
-    } else {
-      const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCounter(entry.target);
-            counterObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.8 });
-
-      counters.forEach((element) => counterObserver.observe(element));
-    }
-
-    document.querySelectorAll("[data-tilt]").forEach((card) => {
-      if (reduceMotion) {
-        return;
-      }
-
-      card.addEventListener("pointermove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width;
-        const py = (event.clientY - rect.top) / rect.height;
-        const rotateY = (px - 0.5) * 10;
-        const rotateX = (0.5 - py) * 10;
-        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-      });
-
-      card.addEventListener("pointerleave", () => {
-        card.style.transform = "";
       });
     });
   </script>
