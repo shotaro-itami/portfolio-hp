@@ -1,0 +1,8 @@
+*.key
+*.pem
+*.crt
+.env
+.env.*
+!.env.example
+*.htpasswd
+sheet-writer/.secrets/
