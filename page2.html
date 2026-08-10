@@ -6,20 +6,21 @@
   <title>人物紹介 | 2枚目ページ</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --bg-soft: #141b24;
-      --panel: rgba(17, 24, 34, 0.78);
-      --panel-strong: rgba(12, 18, 27, 0.92);
-      --line: rgba(255, 255, 255, 0.1);
-      --line-strong: rgba(255, 255, 255, 0.2);
-      --text: #f3f6fb;
-      --muted: #aab7c8;
-      --accent: #f08a24;
-      --accent-2: #4fd1c5;
-      --glow: rgba(240, 138, 36, 0.18);
+      --bg: #10110f;
+      --bg-soft: #171914;
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.09);
+      --line: rgba(255, 255, 255, 0.13);
+      --line-strong: rgba(255, 255, 255, 0.25);
+      --text: #f7f3ea;
+      --muted: #beb8ab;
+      --accent: #f4b665;
+      --accent-2: #63d8c6;
+      --accent-3: #e36f7c;
+      --glow: rgba(244, 182, 101, 0.16);
       --shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
-      --radius: 26px;
-      --radius-sm: 18px;
+      --radius: 8px;
+      --radius-sm: 8px;
       --max: 1180px;
     }
 
@@ -38,10 +39,8 @@
       font-family: "Inter", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
       line-height: 1.7;
       background:
-        radial-gradient(circle at 15% 20%, rgba(79, 209, 197, 0.12), transparent 28%),
-        radial-gradient(circle at 80% 0%, rgba(240, 138, 36, 0.12), transparent 25%),
-        radial-gradient(circle at 50% 100%, rgba(97, 76, 211, 0.1), transparent 30%),
-        linear-gradient(180deg, #0b1016 0%, #121926 48%, #0d1117 100%);
+        linear-gradient(135deg, rgba(244, 182, 101, 0.12) 0 12%, transparent 12% 45%, rgba(99, 216, 198, 0.08) 45% 58%, transparent 58%),
+        linear-gradient(180deg, #10110f 0%, #171914 52%, #10110f 100%);
       overflow-x: hidden;
     }
 
@@ -54,23 +53,8 @@
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+      mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
       opacity: 0.45;
-    }
-
-    .cursor-glow {
-      position: fixed;
-      width: 380px;
-      height: 380px;
-      left: 0;
-      top: 0;
-      border-radius: 50%;
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(79, 209, 197, 0.12), rgba(240, 138, 36, 0.08), transparent 68%);
-      transform: translate3d(-50%, -50%, 0);
-      filter: blur(18px);
-      z-index: 0;
-      opacity: 0.9;
     }
 
     .page {
@@ -92,8 +76,8 @@
       z-index: 5;
       padding: 12px 16px;
       border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(8, 12, 18, 0.6);
+      border-radius: 8px;
+      background: rgba(16, 17, 15, 0.78);
       backdrop-filter: blur(16px);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     }
@@ -110,10 +94,10 @@
       height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      border-radius: 8px;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      background: linear-gradient(135deg, rgba(240, 138, 36, 0.25), rgba(79, 209, 197, 0.18));
+      letter-spacing: 0;
+      background: linear-gradient(135deg, rgba(244, 182, 101, 0.28), rgba(99, 216, 198, 0.18));
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -130,7 +114,7 @@
     .brand-copy span {
       font-size: 0.75rem;
       color: var(--muted);
-      letter-spacing: 0.08em;
+      letter-spacing: 0;
       text-transform: uppercase;
     }
 
@@ -147,7 +131,7 @@
     .primary-link {
       appearance: none;
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.03);
       color: var(--text);
       padding: 10px 14px;
@@ -204,7 +188,7 @@
       align-items: center;
       gap: 8px;
       font-size: 0.75rem;
-      letter-spacing: 0.14em;
+      letter-spacing: 0;
       text-transform: uppercase;
       color: var(--muted);
     }
@@ -219,9 +203,9 @@
 
     h1 {
       margin: 14px 0 14px;
-      font-size: clamp(2.6rem, 6vw, 5.8rem);
+      font-size: 5rem;
       line-height: 0.96;
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
     }
 
     .hero-copy p {
@@ -257,14 +241,14 @@
     .stat {
       padding: 14px 14px 16px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.03);
     }
 
     .stat strong {
       display: block;
       margin-bottom: 4px;
-      font-size: clamp(1.4rem, 2vw, 2.2rem);
+      font-size: 2rem;
       line-height: 1;
     }
 
@@ -278,7 +262,7 @@
       display: grid;
       grid-template-rows: auto auto 1fr;
       gap: 14px;
-      background: linear-gradient(180deg, rgba(19, 27, 38, 0.96), rgba(8, 12, 18, 0.82));
+      background: linear-gradient(180deg, rgba(31, 32, 27, 0.92), rgba(16, 17, 15, 0.82));
     }
 
     .hero-panel::before,
@@ -289,12 +273,14 @@
     .links-panel::before {
       content: "";
       position: absolute;
-      inset: auto -10% -55% auto;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: var(--glow);
-      filter: blur(10px);
+      inset: 0;
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      background: linear-gradient(135deg, transparent 0 72%, var(--glow) 72% 73%, transparent 73%);
+      filter: none;
+      opacity: 0.75;
+      pointer-events: none;
     }
 
     .status-row {
@@ -310,7 +296,7 @@
       gap: 8px;
       padding: 7px 11px;
       border: 1px solid rgba(79, 209, 197, 0.22);
-      border-radius: 999px;
+      border-radius: 6px;
       color: #cafaf2;
       background: rgba(79, 209, 197, 0.08);
       font-size: 0.84rem;
@@ -356,7 +342,7 @@
     .quote-panel {
       margin-top: auto;
       padding: 18px;
-      border-radius: 22px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -380,9 +366,9 @@
 
     .section h2 {
       margin: 10px 0 10px;
-      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-size: 2.25rem;
       line-height: 1.05;
-      letter-spacing: -0.03em;
+      letter-spacing: 0;
     }
 
     .section-intro {
@@ -412,7 +398,7 @@
     .links-panel h3 {
       margin: 0 0 8px;
       font-size: 1.04rem;
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     .story-card p,
@@ -428,7 +414,7 @@
       margin-bottom: 10px;
       color: #ffd7a9;
       font-size: 0.84rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0;
       text-transform: uppercase;
     }
 
@@ -444,7 +430,7 @@
       height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.04);
       color: #ffd7a9;
@@ -487,7 +473,7 @@
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      border-radius: 999px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--muted);
@@ -566,7 +552,7 @@
 
       .topbar {
         position: static;
-        border-radius: 24px;
+        border-radius: 8px;
         padding: 14px;
       }
 
@@ -581,12 +567,20 @@
       .timeline-card,
       .hobby-card,
       .links-panel {
-        border-radius: 22px;
+        border-radius: 8px;
       }
 
       .hero-copy {
         min-height: auto;
         padding: 24px;
+      }
+
+      h1 {
+        font-size: 3.1rem;
+      }
+
+      .section h2 {
+        font-size: 1.85rem;
       }
 
       .hero-stats,
@@ -616,15 +610,10 @@
         transform: none;
       }
 
-      .cursor-glow {
-        display: none;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="cursor-glow" aria-hidden="true"></div>
-
   <main class="page">
     <header class="topbar reveal">
       <div class="brand">
@@ -953,28 +942,6 @@
       }, { threshold: 0.8 });
 
       counters.forEach((element) => counterObserver.observe(element));
-    }
-
-    const glow = document.querySelector(".cursor-glow");
-    if (glow && !reduceMotion) {
-      let glowX = window.innerWidth / 2;
-      let glowY = window.innerHeight / 2;
-      let currentX = glowX;
-      let currentY = glowY;
-
-      window.addEventListener("pointermove", (event) => {
-        glowX = event.clientX;
-        glowY = event.clientY;
-      });
-
-      const moveGlow = () => {
-        currentX += (glowX - currentX) * 0.12;
-        currentY += (glowY - currentY) * 0.12;
-        glow.style.transform = `translate3d(${currentX - 190}px, ${currentY - 190}px, 0)`;
-        requestAnimationFrame(moveGlow);
-      };
-
-      moveGlow();
     }
 
     document.querySelectorAll("[data-tilt]").forEach((card) => {

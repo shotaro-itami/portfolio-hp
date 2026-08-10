@@ -6,21 +6,21 @@
   <title>GCE 単一 VM 本番構成図と運用資料</title>
   <style>
     :root {
-      --bg: #726b95;
-      --bg-deep: #595277;
-      --grid: rgba(255, 255, 255, 0.05);
-      --frame: rgba(255, 255, 255, 0.8);
-      --frame-soft: rgba(255, 255, 255, 0.28);
-      --panel: rgba(58, 52, 86, 0.82);
-      --panel-strong: rgba(45, 40, 69, 0.88);
-      --line: #ffffff;
-      --text: #fcfbff;
-      --muted: rgba(245, 243, 255, 0.92);
-      --blue: rgba(92, 120, 184, 0.28);
-      --mint: rgba(84, 148, 162, 0.24);
-      --gold: rgba(166, 134, 72, 0.24);
-      --pink: rgba(155, 96, 128, 0.24);
-      --red: rgba(168, 88, 88, 0.24);
+      --bg: #10110f;
+      --bg-deep: #171914;
+      --grid: rgba(255, 255, 255, 0.045);
+      --frame: rgba(255, 255, 255, 0.62);
+      --frame-soft: rgba(255, 255, 255, 0.2);
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.09);
+      --line: #f7f3ea;
+      --text: #f7f3ea;
+      --muted: #c8c0b2;
+      --blue: rgba(99, 216, 198, 0.12);
+      --mint: rgba(99, 216, 198, 0.16);
+      --gold: rgba(244, 182, 101, 0.16);
+      --pink: rgba(227, 111, 124, 0.14);
+      --red: rgba(227, 111, 124, 0.18);
     }
 
     * { box-sizing: border-box; }
@@ -30,14 +30,13 @@
       min-height: 100vh;
       padding: 16px 12px 24px;
       color: var(--text);
-      font-family: "Trebuchet MS", "Yu Gothic UI", sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", "Yu Gothic UI", sans-serif;
       background:
         linear-gradient(var(--grid) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid) 1px, transparent 1px),
-        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.09), transparent 28%),
-        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.07), transparent 25%),
-        linear-gradient(180deg, #7d76a2 0%, #665f88 100%);
-      background-size: 22px 22px, 22px 22px, auto, auto, auto;
+        linear-gradient(135deg, rgba(244, 182, 101, 0.1) 0 12%, transparent 12% 45%, rgba(99, 216, 198, 0.08) 45% 58%, transparent 58%),
+        linear-gradient(180deg, #10110f 0%, #171914 54%, #10110f 100%);
+      background-size: 22px 22px, 22px 22px, auto, auto;
       overflow-x: hidden;
     }
 
@@ -50,18 +49,18 @@
       overflow: hidden;
       isolation: isolate;
       page-break-after: always;
-      clip-path: polygon(34px 0, calc(100% - 34px) 0, 100% 34px, 100% calc(100% - 34px), calc(100% - 34px) 100%, 34px 100%, 0 calc(100% - 34px), 0 34px);
+      clip-path: none;
       border: 1px solid rgba(255, 255, 255, 0.24);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-        rgba(58, 52, 86, 0.78);
+        rgba(16, 17, 15, 0.78);
       background-size: auto, 22px 22px, 22px 22px, auto, auto;
       box-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-        0 24px 60px rgba(41, 35, 63, 0.28);
+        0 24px 60px rgba(0, 0, 0, 0.28);
+      border-radius: 8px;
     }
 
     .slide:last-child { page-break-after: auto; }
@@ -72,33 +71,17 @@
       inset: 18px;
       z-index: 0;
       pointer-events: none;
-      clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
+      clip-path: none;
       border: 1px solid rgba(255, 255, 255, 0.56);
       background:
-        linear-gradient(rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.52)) 50% 18px / 248px 12px no-repeat,
-        linear-gradient(rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.48)) 50% calc(100% - 18px) / 264px 10px no-repeat,
-        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) 16px 84px / 118px 1px no-repeat,
-        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 292px) calc(100% - 114px) / 238px 1px no-repeat,
-        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0 14px, transparent 14px 24px) calc(100% - 82px) 14px / 54px 86px no-repeat,
-        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.34) 0 16px, transparent 16px 26px) -8px 52% / 122px 56px no-repeat;
-      opacity: 0.42;
+        linear-gradient(90deg, rgba(244, 182, 101, 0.45), transparent) 18px 20px / 250px 2px no-repeat,
+        linear-gradient(90deg, rgba(99, 216, 198, 0.34), transparent) 18px calc(100% - 22px) / 320px 2px no-repeat;
+      opacity: 0.55;
+      border-radius: 8px;
     }
 
     .slide::after {
-      content: "";
-      position: absolute;
-      inset: 30px 34px;
-      z-index: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle, rgba(255, 255, 255, 0.72) 0 1.5px, transparent 1.8px) 36px 18px / 38px 36px,
-        radial-gradient(circle, rgba(255, 255, 255, 0.66) 0 1.4px, transparent 1.7px) calc(100% - 110px) 28px / 34px 34px,
-        radial-gradient(circle, rgba(255, 255, 255, 0.62) 0 1.4px, transparent 1.7px) 50% 96px / 28px 28px,
-        radial-gradient(circle, rgba(255, 255, 255, 0.62) 0 1.5px, transparent 1.8px) calc(100% - 204px) calc(100% - 126px) / 40px 36px,
-        linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) 190px 102px / 24px 4px no-repeat,
-        linear-gradient(rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.34)) calc(100% - 6px) 48% / 4px 56px no-repeat,
-        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.48) 0 4px, transparent 4px 12px) 0 calc(100% - 4px) / 382px 10px no-repeat;
-      opacity: 0.18;
+      display: none;
     }
 
     .slide > * {
@@ -109,10 +92,10 @@
     .badge, .label {
       display: inline-block;
       border: 1px solid rgba(255, 255, 255, 0.66);
-      border-radius: 4px;
+      border-radius: 6px;
       background: rgba(33, 29, 51, 0.72);
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
@@ -127,7 +110,7 @@
       margin-bottom: 10px;
     }
 
-    h1 { margin: 16px 0 12px; font-size: 44px; line-height: 1.12; letter-spacing: 0.02em; }
+    h1 { margin: 16px 0 12px; font-size: 44px; line-height: 1.12; letter-spacing: 0; }
     h2 { margin: 0 0 12px; font-size: 30px; line-height: 1.18; }
     h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.22; }
 
@@ -156,7 +139,7 @@
     .card {
       padding: 20px 22px;
       border: 1px solid rgba(255, 255, 255, 0.42);
-      border-radius: 18px;
+      border-radius: 8px;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)),
         var(--panel);
@@ -166,11 +149,11 @@
       backdrop-filter: blur(3px);
     }
 
-    .panel-blue { background: linear-gradient(180deg, rgba(92, 120, 184, 0.34), rgba(58, 52, 86, 0.96)); }
-    .panel-mint { background: linear-gradient(180deg, rgba(84, 148, 162, 0.3), rgba(58, 52, 86, 0.96)); }
-    .panel-gold { background: linear-gradient(180deg, rgba(166, 134, 72, 0.28), rgba(58, 52, 86, 0.96)); }
-    .panel-pink { background: linear-gradient(180deg, rgba(155, 96, 128, 0.28), rgba(58, 52, 86, 0.96)); }
-    .panel-red { background: linear-gradient(180deg, rgba(168, 88, 88, 0.28), rgba(58, 52, 86, 0.96)); }
+    .panel-blue { background: linear-gradient(180deg, rgba(99, 216, 198, 0.16), rgba(255, 255, 255, 0.045)); }
+    .panel-mint { background: linear-gradient(180deg, rgba(99, 216, 198, 0.12), rgba(255, 255, 255, 0.045)); }
+    .panel-gold { background: linear-gradient(180deg, rgba(244, 182, 101, 0.16), rgba(255, 255, 255, 0.045)); }
+    .panel-pink { background: linear-gradient(180deg, rgba(227, 111, 124, 0.13), rgba(255, 255, 255, 0.045)); }
+    .panel-red { background: linear-gradient(180deg, rgba(227, 111, 124, 0.18), rgba(255, 255, 255, 0.045)); }
 
     .flow {
       display: flex;
@@ -183,7 +166,7 @@
     .bubble {
       padding: 11px 18px;
       border: 1px solid rgba(255, 255, 255, 0.55);
-      border-radius: 4px;
+      border-radius: 8px;
       background: rgba(34, 30, 53, 0.8);
       font-weight: 800;
       font-size: 16px;
@@ -209,7 +192,7 @@
       margin: 12px 0 0;
       padding: 15px 17px;
       border: 1px solid rgba(255, 255, 255, 0.42);
-      border-radius: 16px;
+      border-radius: 8px;
       background: rgba(28, 24, 45, 0.92);
       color: var(--text);
       white-space: pre-wrap;
@@ -230,15 +213,15 @@
       bottom: 20px;
       color: var(--muted);
       font-size: 13px;
-      letter-spacing: 0.16em;
+      letter-spacing: 0;
     }
 
     .flowchart-shell {
       margin-top: 14px;
       padding: 14px;
       border: 1px solid rgba(255, 255, 255, 0.38);
-      border-radius: 18px;
-      background: rgba(37, 32, 57, 0.9);
+      border-radius: 8px;
+      background: rgba(16, 17, 15, 0.72);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -382,7 +365,7 @@
 
       .flowchart-shell {
         padding: 10px;
-        border-radius: 14px;
+        border-radius: 8px;
       }
 
       .flowchart-svg {
@@ -482,7 +465,7 @@
             .flow-box-strong { fill: rgba(34,30,53,0.88); stroke: rgba(255,255,255,0.9); stroke-width: 2.2; }
             .flow-text { fill: #ffffff; font: 700 24px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
             .flow-sub { fill: rgba(252,251,255,0.9); font: 500 17px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; }
-            .flow-note { fill: rgba(252,251,255,0.88); font: 600 15px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; letter-spacing: 0.08em; }
+            .flow-note { fill: rgba(252,251,255,0.88); font: 600 15px 'Trebuchet MS', 'Yu Gothic UI', sans-serif; letter-spacing: 0; }
             .flow-line { stroke: rgba(255,255,255,0.78); stroke-width: 4; fill: none; marker-end: url(#flowArrow); }
             .flow-split { stroke: rgba(255,255,255,0.52); stroke-width: 3; fill: none; marker-end: url(#flowArrow); }
             .flow-dash { stroke-dasharray: 8 8; }
