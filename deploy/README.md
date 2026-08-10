@@ -54,6 +54,21 @@ sudo htpasswd -B /etc/nginx/auth/portfolio-architecture.htpasswd <username>
 
 Nginx 設定を変更した場合は、使用中の本番 Nginx 設定へ `deploy/nginx/itamishotaro.com.conf` の内容を反映してから `nginx -t` と reload を行います。`deploy/release.sh` は HTML の release 切替だけを行い、Nginx 設定やパスワードファイルは作成しません。
 
+現在の本番では、実際に有効な設定は次の symlink から読み込まれます。
+
+```bash
+/etc/nginx/sites-enabled/itamishotaro.com -> /etc/nginx/sites-available/itamishotaro.com
+```
+
+そのため、反映先は `.conf` 付きではなく `/etc/nginx/sites-available/itamishotaro.com` です。
+
+```bash
+sudo cp deploy/nginx/itamishotaro.com.conf /etc/nginx/sites-available/itamishotaro.com
+sudo nginx -T 2>/dev/null | grep -n -A6 -B3 'architecture-diagram'
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
 ## Rollback
 
 ```bash

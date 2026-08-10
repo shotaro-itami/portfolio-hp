@@ -441,8 +441,10 @@
           <li>release root: <span class="mono">/var/www/releases/portfolio-hp</span></li>
           <li>public:
             <span class="mono">/var/www/html/index.html</span>,
-            <span class="mono">/var/www/html/page2.html</span>
+            <span class="mono">/var/www/html/page2.html</span>,
+            <span class="mono">/var/www/html/architecture-diagram.html</span>
           </li>
+          <li>構成資料: <span class="mono">Basic Auth</span> で保護</li>
           <li>最新 release: <span class="mono">20260411000949</span></li>
         </ul>
       </div>
@@ -575,7 +577,7 @@
       <div class="card panel-pink">
         <div class="label">CONFIG</div>
         <h3>本番設定</h3>
-        <p class="small"><span class="mono">/etc/reading-time-tracker/reading-time-tracker.env</span><br>repo 配下に `.env` を置かない。</p>
+        <p class="small"><span class="mono">/etc/nginx/sites-available/itamishotaro.com</span><br><span class="mono">/etc/reading-time-tracker/reading-time-tracker.env</span><br>repo 配下に `.env` や認証ファイルを置かない。</p>
       </div>
     </div>
     <pre>reading-time-tracker:
@@ -584,20 +586,25 @@ current   -> /opt/reading-time-tracker/releases/20260411003055
 frontend  -> /var/www/html/books -> /var/www/releases/reading-time-tracker/20260411003055
 db        -> /var/lib/reading-time-tracker/books.db
 env       -> /etc/reading-time-tracker/reading-time-tracker.env
-backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db</pre>
+backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db
+
+portfolio-hp:
+nginx    -> /etc/nginx/sites-enabled/itamishotaro.com -> /etc/nginx/sites-available/itamishotaro.com
+auth     -> /etc/nginx/auth/portfolio-architecture.htpasswd</pre>
     <div class="footer">3 / 9</div>
   </section>
 
   <section class="slide">
     <div class="badge">SLIDE 4</div>
     <h1>公開経路と Nginx の役割</h1>
-    <p class="lead">Nginx は静的サイト、SPA、API の入口を 1 つにまとめる。`/books/` は frontend release の symlink を返し、`/books/api/` は unix socket 経由で Gunicorn に流す。</p>
+    <p class="lead">Nginx は静的サイト、保護済み構成資料、SPA、API の入口を 1 つにまとめる。`/architecture-diagram.html` は Basic Auth、`/books/api/` は unix socket 経由で Gunicorn に流す。</p>
     <div class="grid-3">
       <div class="card panel-blue">
         <div class="label">ROUTING</div>
         <ul>
           <li><span class="mono">/</span> -> `portfolio-hp`</li>
           <li><span class="mono">/page2.html</span> -> `portfolio-hp`</li>
+          <li><span class="mono">/architecture-diagram.html</span> -> Basic Auth</li>
           <li><span class="mono">/books/</span> -> `reading-time-tracker` frontend</li>
           <li><span class="mono">/books/api/</span> -> `reading-time-tracker` backend</li>
         </ul>
@@ -613,15 +620,21 @@ backup    -> /var/backups/reading-time-tracker/books-YYYYMMDDHHMMSS.db</pre>
         </ul>
       </div>
       <div class="card panel-gold">
-        <div class="label">WARNING</div>
+        <div class="label">ACCESS CONTROL</div>
         <ul>
-          <li><span class="mono">proxy_headers_hash</span> の warning は出ている</li>
-          <li>今回の反映では致命傷ではない</li>
-          <li>後日 `nginx.conf` 調整で解消余地あり</li>
+          <li>構成資料だけ <span class="mono">Basic Auth</span> を要求</li>
+          <li>認証ファイル: <span class="mono">/etc/nginx/auth/portfolio-architecture.htpasswd</span></li>
+          <li>未認証なら <span class="mono">401 Unauthorized</span> が正常</li>
         </ul>
       </div>
     </div>
-    <pre>location = /books/api/admin/session {
+    <pre>location = /architecture-diagram.html {
+    auth_basic "Production architecture";
+    auth_basic_user_file /etc/nginx/auth/portfolio-architecture.htpasswd;
+    try_files $uri =404;
+}
+
+location = /books/api/admin/session {
     limit_req zone=books_admin_session burst=5 nodelay;
 }
 
@@ -670,9 +683,9 @@ curl -I https://itamishotaro.com/books/api/health</pre>
 
   <section class="slide">
     <div class="badge">SLIDE 6</div>
-    <h1>Deploy, Rollback, Restore</h1>
-    <p class="lead">デプロイは release 作成後に symlink を切り替える。rollback は symlink の戻しだけで完結させ、DB restore は service stop を必ず挟む。</p>
-    <div class="grid-3">
+    <h1>Deploy, Nginx, Rollback, Restore</h1>
+    <p class="lead">デプロイは release 作成後に symlink を切り替える。Nginx 設定と Basic Auth の認証ファイルは release とは別管理なので、変更時だけ明示的に反映する。</p>
+    <div class="grid-4">
       <div class="card panel-blue">
         <div class="label">DEPLOY</div>
         <pre>portfolio-hp:
@@ -684,6 +697,15 @@ git pull
 ./deploy/release.sh</pre>
       </div>
       <div class="card panel-mint">
+        <div class="label">NGINX CONFIG</div>
+        <pre>sudo cp deploy/nginx/itamishotaro.com.conf \
+  /etc/nginx/sites-available/itamishotaro.com
+
+sudo nginx -T 2>/dev/null | grep -n -A6 -B3 'architecture-diagram'
+sudo nginx -t
+sudo systemctl reload nginx</pre>
+      </div>
+      <div class="card panel-pink">
         <div class="label">ROLLBACK</div>
         <pre>frontend:
 ln -sfnT previous /var/www/html/books
@@ -704,7 +726,7 @@ systemctl start reading-time-tracker
 curl /books/api/health</pre>
       </div>
     </div>
-    <div class="note">重要: 既存ディレクトリを symlink に置き換えるときは <span class="mono">ln -sfnT</span> を使う。単純な <span class="mono">ln -sfn</span> だと既存ディレクトリを置き換えられない。</div>
+    <div class="note">重要: <span class="mono">deploy/release.sh</span> は HTML の release 切替だけを行う。Nginx の有効設定は <span class="mono">/etc/nginx/sites-enabled/itamishotaro.com</span> のリンク先を確認してから上書きする。</div>
     <div class="footer">6 / 9</div>
   </section>
 
@@ -750,12 +772,13 @@ sudo journalctl -u reading-time-tracker-healthcheck.service -n 50 --no-pager</pr
   <section class="slide">
     <div class="badge">SLIDE 8</div>
     <h1>正常系の確認ポイント</h1>
-    <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 4 本、service 1 本、symlink 4 本、backup 1 本を見れば十分です。</p>
+    <p class="lead">この構成で「今まともに動いているか」を最短で見るなら、URL 5 本、service 1 本、symlink 4 本、backup 1 本、Nginx の有効設定を見れば十分です。</p>
     <div class="grid-2">
       <div class="card panel-blue">
         <div class="label">HTTP</div>
         <pre>curl -I https://itamishotaro.com/
 curl -I https://itamishotaro.com/page2.html
+curl -I https://itamishotaro.com/architecture-diagram.html
 curl -I https://itamishotaro.com/books/
 curl -I https://itamishotaro.com/books/api/health</pre>
       </div>
@@ -766,14 +789,15 @@ readlink -f /opt/reading-time-tracker/current
 readlink -f /var/www/html/books
 readlink -f /var/www/html/index.html
 readlink -f /var/www/html/page2.html
-ls -1 /var/backups/reading-time-tracker</pre>
+ls -1 /var/backups/reading-time-tracker
+sudo nginx -T 2>/dev/null | grep -n -A6 -B3 'architecture-diagram'</pre>
       </div>
     </div>
     <div class="grid-4" style="margin-top:18px">
       <div class="card panel-blue"><h3>期待</h3><p class="small"><span class="mono">/</span> が 200</p></div>
       <div class="card panel-mint"><h3>期待</h3><p class="small"><span class="mono">/books/</span> が 200</p></div>
       <div class="card panel-gold"><h3>期待</h3><p class="small"><span class="mono">/books/api/health</span> が 200</p></div>
-      <div class="card panel-pink"><h3>期待</h3><p class="small">symlink が release を指す</p></div>
+      <div class="card panel-pink"><h3>期待</h3><p class="small">構成資料は未認証で <span class="mono">401</span></p></div>
     </div>
     <div class="footer">8 / 9</div>
   </section>
@@ -791,6 +815,8 @@ ls -1 /var/backups/reading-time-tracker</pre>
           <li>DB 権限不足だと Alembic が <span class="mono">unable to open database file</span></li>
           <li><span class="mono">/var/www/html/books</span> が既存ディレクトリだと初回 symlink 化が必要</li>
           <li>backup service は <span class="mono">sqlite3</span> が無いと失敗</li>
+          <li><span class="mono">&lt;username&gt;</span> は実ユーザー名に置き換える。未置換だと htpasswd 作成に失敗</li>
+          <li><span class="mono">.conf</span> 付きファイルへコピーしても、sites-enabled のリンク先が違うと反映されない</li>
         </ul>
       </div>
       <div class="card panel-gold">
@@ -800,6 +826,7 @@ ls -1 /var/backups/reading-time-tracker</pre>
           <li>DB と env は repo 配下に置かない</li>
           <li>初回移行や rollback は <span class="mono">ln -sfnT</span> を使う</li>
           <li><span class="mono">rm -rf /var/www/html/books</span> は使わない</li>
+          <li>Nginx 反映前に <span class="mono">nginx -T</span> で有効設定を確認</li>
           <li>障害判断は「最新の healthcheck 成功 / 失敗」で見る</li>
         </ul>
       </div>
@@ -809,6 +836,8 @@ backend current -> /opt/reading-time-tracker/releases/20260411003055
 frontend books  -> /var/www/releases/reading-time-tracker/20260411003055
 portfolio index -> /var/www/releases/portfolio-hp/20260411000949/index.html
 portfolio page2 -> /var/www/releases/portfolio-hp/20260411000949/page2.html
+nginx site      -> /etc/nginx/sites-enabled/itamishotaro.com
+architecture   -> Basic Auth, expect 401 before login
 backup file     -> /var/backups/reading-time-tracker/books-20260411004529.db</pre>
     <div class="footer">9 / 9</div>
   </section>
